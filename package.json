@@ -15,5 +15,9 @@
     "url": "https://github.com/Soumyadeepbasak037/TRAX-Transport-Real-time-Analytics-Tracking/issues"
   },
   "homepage": "https://github.com/Soumyadeepbasak037/TRAX-Transport-Real-time-Analytics-Tracking#readme",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "express": "^5.1.0",
+    "socket.io": "^4.8.1"
+  }
 }
