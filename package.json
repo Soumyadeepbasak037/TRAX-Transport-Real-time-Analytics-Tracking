@@ -17,7 +17,14 @@
   "homepage": "https://github.com/Soumyadeepbasak037/TRAX-Transport-Real-time-Analytics-Tracking#readme",
   "description": "",
   "dependencies": {
+    "bcrypt": "^6.0.0",
+    "eslint": "^9.34.0",
     "express": "^5.1.0",
+    "joi": "^18.0.1",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.16.3",
+    "redis": "^5.8.2",
     "socket.io": "^4.8.1"
-  }
+  },
+  "type": "module"
 }
