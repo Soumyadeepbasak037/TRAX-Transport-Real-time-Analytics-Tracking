@@ -1,4 +1,4 @@
-const roleMiddleware = (...allowedroles) => {
+const roleMiddleware = (...allowedRoles) => {
   return (req, res, next) => {
     if (!req.user) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -11,3 +11,5 @@ const roleMiddleware = (...allowedroles) => {
   };
 };
 module.exports = roleMiddleware;
+
+//higher order middleware, only way for making a configurable middleware

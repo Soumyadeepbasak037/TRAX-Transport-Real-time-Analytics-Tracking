@@ -1,7 +1,7 @@
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
-const db = require("../config/db");
-const Joi = require("joi");
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import db from "../config/db.js";
+import Joi from "joi";
 
 // Move this to .env in production
 const SECRET_KEY = "hehe";
@@ -14,7 +14,7 @@ const registerSchema = Joi.object({
   role: Joi.string().min(3).max(10).required(),
 });
 
-exports.register = async (req, res) => {
+export const register = async (req, res) => {
   const { username, password, email, role } = req.body;
 
   const { error } = registerSchema.validate({
@@ -31,11 +31,11 @@ exports.register = async (req, res) => {
 
   try {
     const result = await db.query(
-      `INSERT INTO users (username, password, email, role) VALUES ($1, $2, $3 ,$4) RETURNING user_id`,
+      `INSERT INTO users (username, password_hash, email, role) VALUES ($1, $2, $3 ,$4) RETURNING user_id`,
       [username, hashed_passwd, email, role]
     );
 
-    const user_id = result.rows[0].id;
+    const user_id = result.rows[0].user_id;
     return res.status(201).json({ message: "User registered", user_id });
   } catch (err) {
     if (err.code === "23505") {
@@ -55,7 +55,7 @@ const loginSchema = Joi.object({
   password: Joi.string().min(6).required(),
 });
 
-exports.login = async (req, res) => {
+export const login = async (req, res) => {
   const { username, password } = req.body;
 
   const { error } = loginSchema.validate({ username, password });
@@ -72,14 +72,14 @@ exports.login = async (req, res) => {
     }
 
     const user = result.rows[0];
-    const passwordMatch = bcrypt.compareSync(password, user.password);
+    const passwordMatch = bcrypt.compareSync(password, user.password_hash);
 
     if (!passwordMatch) {
       return res.status(401).json({ message: "Invalid password" });
     }
 
     const token = jwt.sign(
-      { id: user.id, username: user.username, role: user.role },
+      { id: user.user_id, username: user.username, role: user.role },
       SECRET_KEY,
       { expiresIn: "1h" }
     );

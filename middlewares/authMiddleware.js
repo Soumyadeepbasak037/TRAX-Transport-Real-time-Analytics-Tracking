@@ -1,7 +1,7 @@
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
 const SECRET_KEY = "hehe"; // fr nw its here.
 
-function auth_middleware(req, res, next) {
+export function auth_middleware(req, res, next) {
   const authHeader = req.headers["authorization"];
   if (!authHeader) {
     return res.status(401).json({ message: "No token provided" });
@@ -17,5 +17,3 @@ function auth_middleware(req, res, next) {
     return res.status(403).json({ message: "Invalid token" });
   }
 }
-
-module.exports = auth_middleware;
