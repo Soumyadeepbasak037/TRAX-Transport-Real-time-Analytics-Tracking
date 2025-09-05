@@ -2,6 +2,9 @@ import express from "express";
 import cors from "cors";
 import http from "http";
 import { Server } from "socket.io";
+import jwt from "jsonwebtoken";
+
+const SECRET_KEY = "hehe";
 
 const app = express();
 const server = http.createServer(app);
@@ -22,17 +25,48 @@ app.use(express.json());
 // import authRoutes from "../e_com_pg/routes/authroutes.js";
 // app.use("/api/auth", authRoutes);
 
-import driverHandlers from "./sockets/driverSocket";
-import passengerHandlers from "./sockets/passengerSocket";
+import driverHandler from "./sockets/driverSocket";
+import passengerHandler from "./sockets/passengerSocket";
+
+//io middleware
+io.use((socket, next) => {
+  try {
+    const token = socket.handshake.auth.token;
+    if (!token) {
+      return next(new Error("No token"));
+    }
+    const payload = jwt.verify(token, SECRET_KEY);
+
+    socket.role = payload.role;
+    socket.userID = payload.id;
+    if (payload.vehicleID) {
+      socket.vehicleID = payload.vehicleID;
+    }
+    next();
+  } catch (err) {
+    next(new Error("Auth failed"));
+  }
+});
 
 io.on("connection", (socket) => {
-  console.log(`New Connection: ${socket.id}`);
+  console.log("New socket:", socket.id, "Role:", socket.role);
 
-  driverHandlers(io, socket);
-  passengerHandlers(io, socket);
+  if (socket.role === "driver") {
+    socket.join(socket.vehicleId);
+    console.log(`Driver ${socket.userId} joined vehicle ${socket.vehicleId}`);
+  }
 
-  socket.on("disconnect", () => {
-    console.log("Socket disconnected:", socket.id);
+  if (socket.role === "passenger") {
+    // passenger tells which vehicle they want after connecting
+    socket.on("joinVehicle", ({ vehicleId }) => {
+      socket.join(vehicleId);
+      console.log(`Passenger ${socket.userId} joined vehicle ${vehicleId}`);
+    });
+  }
+
+  socket.on("driverLocation", ({ lat, lng }) => {
+    if (socket.role !== "driver") return;
+    io.to(socket.vehicleId).emit("locationUpdate", { lat, lng });
   });
 });
 

@@ -78,11 +78,35 @@ export const login = async (req, res) => {
       return res.status(401).json({ message: "Invalid password" });
     }
 
-    const token = jwt.sign(
-      { id: user.user_id, username: user.username, role: user.role },
-      SECRET_KEY,
-      { expiresIn: "1h" }
-    );
+    if (user.role == "driver") {
+      const joinQuery = `select u.user_id,u.role,
+                      d.driver_id,
+                      v.vehicle_id,v.vehicle_number 
+                      from users as u 
+                      inner join drivers as d 
+                      on u.user_id = d.user_id 
+                      inner join vehicles as v 
+                      on d.assigned_vehicle_id = v.vehicle_id`;
+      const result = await db.query(joinQuery);
+      const vehicle_id = result.rows[0];
+
+      const token = jwt.sign(
+        {
+          id: user.user_id,
+          username: user.username,
+          role: user.role,
+          vehicle_id: vehicle_id.vehicle_id,
+        },
+        SECRET_KEY,
+        { expiresIn: "1h" }
+      );
+    } else {
+      const token = jwt.sign(
+        { id: user.user_id, username: user.username, role: user.role },
+        SECRET_KEY,
+        { expiresIn: "1h" }
+      );
+    }
 
     res.json({ token });
   } catch (err) {
