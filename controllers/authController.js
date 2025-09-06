@@ -77,7 +77,7 @@ export const login = async (req, res) => {
     if (!passwordMatch) {
       return res.status(401).json({ message: "Invalid password" });
     }
-
+    let token = "";
     if (user.role == "driver") {
       const joinQuery = `select u.user_id,u.role,
                       d.driver_id,
@@ -86,23 +86,30 @@ export const login = async (req, res) => {
                       inner join drivers as d 
                       on u.user_id = d.user_id 
                       inner join vehicles as v 
-                      on d.assigned_vehicle_id = v.vehicle_id`;
-      const result = await db.query(joinQuery);
+                      on d.assigned_vehicle_id = v.vehicle_id
+                      where u.user_id = $1
+                      `;
+      const result = await db.query(joinQuery, [user.user_id]);
       const vehicle_id = result.rows[0];
 
-      const token = jwt.sign(
+      token = jwt.sign(
         {
           id: user.user_id,
           username: user.username,
           role: user.role,
-          vehicle_id: vehicle_id.vehicle_id,
+          vehicleId: vehicle_id.vehicle_id,
         },
         SECRET_KEY,
         { expiresIn: "1h" }
       );
     } else {
-      const token = jwt.sign(
-        { id: user.user_id, username: user.username, role: user.role },
+      token = jwt.sign(
+        {
+          id: user.user_id,
+          username: user.username,
+          role: user.role,
+          vehicleId: null,
+        },
         SECRET_KEY,
         { expiresIn: "1h" }
       );

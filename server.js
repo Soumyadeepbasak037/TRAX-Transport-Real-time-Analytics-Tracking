@@ -25,8 +25,8 @@ app.use(express.json());
 // import authRoutes from "../e_com_pg/routes/authroutes.js";
 // app.use("/api/auth", authRoutes);
 
-import driverHandler from "./sockets/driverSocket";
-import passengerHandler from "./sockets/passengerSocket";
+// import driverHandler from "./sockets/driverSocket";
+// import passengerHandler from "./sockets/passengerSocket";
 
 //io middleware
 io.use((socket, next) => {
@@ -39,7 +39,7 @@ io.use((socket, next) => {
 
     socket.role = payload.role;
     socket.userID = payload.id;
-    if (payload.vehicleID) {
+    if (payload.vehicleID != null) {
       socket.vehicleID = payload.vehicleID;
     }
     next();
@@ -52,13 +52,16 @@ io.on("connection", (socket) => {
   console.log("New socket:", socket.id, "Role:", socket.role);
 
   if (socket.role === "driver") {
+    //    driverHandlers(io, socket);
     socket.join(socket.vehicleId);
     console.log(`Driver ${socket.userId} joined vehicle ${socket.vehicleId}`);
   }
 
   if (socket.role === "passenger") {
-    // passenger tells which vehicle they want after connecting
+    // get vegicle id that passenger wants to join from frontend while joining
+    //    passengerHandlers(io, socket);
     socket.on("joinVehicle", ({ vehicleId }) => {
+      //expose api endpoint to get_vehicleID .) querydb -> send ID
       socket.join(vehicleId);
       console.log(`Passenger ${socket.userId} joined vehicle ${vehicleId}`);
     });
