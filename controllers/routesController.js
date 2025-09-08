@@ -28,8 +28,17 @@ export const insertStops = async (req, res) => {
 
 export const insertRouteStops = async (req, res) => {
   try {
-    const { vehicle_no, stop_order_json } = req.body;
-    const insertQuery = ``;
+    const { vehicle_no, stop_name_array } = req.body;
+
+    const get_stop_id_Query = `
+      SELECT * 
+      FROM stops 
+      WHERE stop_id = ANY($1::int[])
+    `;
+
+    const result = await db.query(get_stop_id_Query, [stop_name_array]);
+
+    console.log(result);
   } catch (err) {
     res.json({ message: err });
   }

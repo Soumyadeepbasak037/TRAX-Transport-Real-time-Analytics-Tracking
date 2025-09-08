@@ -3,7 +3,8 @@ import cors from "cors";
 import http from "http";
 import { Server } from "socket.io";
 import jwt from "jsonwebtoken";
-
+import routeManager from "./routes/routesRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 const SECRET_KEY = "hehe";
 
 const app = express();
@@ -76,6 +77,10 @@ io.on("connection", (socket) => {
 app.get("/", (req, res) => {
   res.send("Server running");
 });
+
+//Routes
+app.use("/api/auth", authRoutes);
+app.use("/api/RouteManagement", routeManager);
 
 server.listen(3000, () => {
   console.log("Server listening on port 3000");

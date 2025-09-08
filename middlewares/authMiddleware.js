@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 const SECRET_KEY = "hehe"; // fr nw its here.
 
-export function auth_middleware(req, res, next) {
+export default function auth_middleware(req, res, next) {
   const authHeader = req.headers["authorization"];
   if (!authHeader) {
     return res.status(401).json({ message: "No token provided" });

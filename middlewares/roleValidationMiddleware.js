@@ -10,6 +10,6 @@ const roleMiddleware = (...allowedRoles) => {
     next();
   };
 };
-module.exports = roleMiddleware;
+export default roleMiddleware;
 
 //higher order middleware, only way for making a configurable middleware

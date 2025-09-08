@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import db from "../config/db.js";
 import Joi from "joi";
-
+import * as helper from "../helper_functions/helper.js";
 // Move this to .env in production
 const SECRET_KEY = "hehe";
 
@@ -14,8 +14,20 @@ const registerSchema = Joi.object({
   role: Joi.string().min(3).max(10).required(),
 });
 
+//Registration
 export const register = async (req, res) => {
-  const { username, password, email, role } = req.body;
+  const {
+    username,
+    password,
+    email,
+    role,
+    vehicle_number,
+    vehicle_type,
+    vehicle_capacity,
+    driver_name,
+    driver_license_no,
+    driver_phone,
+  } = req.body;
 
   const { error } = registerSchema.validate({
     username,
@@ -36,7 +48,25 @@ export const register = async (req, res) => {
     );
 
     const user_id = result.rows[0].user_id;
-    return res.status(201).json({ message: "User registered", user_id });
+    if (role == "passenger") {
+      return res.status(201).json({ message: "User registered", user_id });
+    } else if (role == "driver") {
+      const inserted_vehicle_id = await helper.insertNewVehicle(
+        vehicle_number,
+        vehicle_type,
+        vehicle_capacity
+      );
+      const inserted_driver_id = await helper.insertNewDriver(
+        user_id,
+        driver_name,
+        driver_license_no,
+        driver_phone,
+        inserted_vehicle_id
+      );
+      return res.json({
+        message: `Inserted driver id: ${inserted_driver_id}, assigned vhicle id: ${inserted_vehicle_id}`,
+      });
+    }
   } catch (err) {
     if (err.code === "23505") {
       // Unique constraint violation
@@ -90,14 +120,15 @@ export const login = async (req, res) => {
                       where u.user_id = $1
                       `;
       const result = await db.query(joinQuery, [user.user_id]);
-      const vehicle_id = result.rows[0];
+      const driver_data = result.rows[0];
+      console.log(result);
 
       token = jwt.sign(
         {
           id: user.user_id,
           username: user.username,
           role: user.role,
-          vehicleId: vehicle_id.vehicle_id,
+          vehicleId: driver_data.vehicle_id,
         },
         SECRET_KEY,
         { expiresIn: "1h" }
