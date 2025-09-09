@@ -28,6 +28,12 @@ export const insertStops = async (req, res) => {
 
 export const insertRouteStops = async (req, res) => {
   try {
+    /*
+    {
+     "vehicle_no": "WB19A1234",
+    "stop_name_array": [1, 3, 5, 7, 9]
+    }
+    */
     const { vehicle_no, stop_name_array } = req.body;
 
     const get_stop_id_Query = `
@@ -38,7 +44,16 @@ export const insertRouteStops = async (req, res) => {
 
     const result = await db.query(get_stop_id_Query, [stop_name_array]);
 
+    const inserIntoRoutes = `INSERT INTO routes (vehicle_number,start_point,end_point) VALUES ($1,$2,$3)`;
+
+    const insertResults = await db.query(inserIntoRoutes, [
+      vehicle_no,
+      stop_name_array[0],
+      stop_name_array[stop_name_array.length - 1],
+    ]);
+
     console.log(result);
+    res.json({ message: Success });
   } catch (err) {
     res.json({ message: err });
   }
