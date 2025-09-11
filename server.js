@@ -5,6 +5,8 @@ import { Server } from "socket.io";
 import jwt from "jsonwebtoken";
 import routeManager from "./routes/routesRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import driverSocketHandler from "./sockets/driverSocket.js";
+import passengerSocketHandler from "./sockets/passengerSocket.js";
 const SECRET_KEY = "hehe";
 
 const app = express();
@@ -33,16 +35,17 @@ app.use(express.json());
 io.use((socket, next) => {
   try {
     const token = socket.handshake.auth.token;
-    if (!token) {
-      return next(new Error("No token"));
-    }
+    if (!token) return next(new Error("No token"));
+
     const payload = jwt.verify(token, SECRET_KEY);
 
     socket.role = payload.role;
-    socket.userID = payload.id;
-    if (payload.vehicleID != null) {
-      socket.vehicleID = payload.vehicleID;
+    socket.userId = payload.id; // lowercase 'd'
+    if (payload.vehicleId != null) {
+      // match the JWT property exactly
+      socket.vehicleId = payload.vehicleId;
     }
+
     next();
   } catch (err) {
     next(new Error("Auth failed"));
@@ -53,25 +56,12 @@ io.on("connection", (socket) => {
   console.log("New socket:", socket.id, "Role:", socket.role);
 
   if (socket.role === "driver") {
-    //    driverHandlers(io, socket);
-    socket.join(socket.vehicleId);
-    console.log(`Driver ${socket.userId} joined vehicle ${socket.vehicleId}`);
+    driverSocketHandler(io, socket); // handles trip start & location updates
   }
 
   if (socket.role === "passenger") {
-    // get vegicle id that passenger wants to join from frontend while joining
-    //    passengerHandlers(io, socket);
-    socket.on("joinVehicle", ({ vehicleId }) => {
-      //expose api endpoint to get_vehicleID .) querydb -> send ID
-      socket.join(vehicleId);
-      console.log(`Passenger ${socket.userId} joined vehicle ${vehicleId}`);
-    });
+    passengerSocketHandler(io, socket); // handles joining vehicle rooms
   }
-
-  socket.on("driverLocation", ({ lat, lng }) => {
-    if (socket.role !== "driver") return;
-    io.to(socket.vehicleId).emit("locationUpdate", { lat, lng });
-  });
 });
 
 app.get("/", (req, res) => {

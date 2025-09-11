@@ -1,0 +1,47 @@
+
+<!-- passenger.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Passenger App</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://cdn.socket.io/4.7.1/socket.io.min.js"></script>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <style>
+    #map { height: 90vh; width: 100%; }
+  </style>
+</head>
+<body>
+  <h1>Passenger App 🚌</h1>
+  <div id="map"></div>
+
+  <script>
+    const vehicleId = "2"; // Vehicle passenger wants to track
+    const socket = io("http://localhost:3000");
+
+    // Map setup
+    const map = L.map('map').setView([22.5726, 88.3639], 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19
+    }).addTo(map);
+
+    let marker = null;
+
+    // Join vehicle room
+    socket.emit("passenger:join", { vehicleId });
+
+    // Listen for vehicle location
+    socket.on("vehicleLocationUpdate", (data) => {
+      const { latitude, longitude } = data;
+      if (!marker) {
+        marker = L.marker([latitude, longitude]).addTo(map);
+      } else {
+        marker.setLatLng([latitude, longitude]);
+      }
+      map.panTo([latitude, longitude]);
+      console.log("Vehicle location:", latitude, longitude);
+    });
+  </script>
+</body>
+</html>

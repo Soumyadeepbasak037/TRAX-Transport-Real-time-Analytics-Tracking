@@ -11,4 +11,5 @@ router.post(
   routes_controller.insertRouteStops
 );
 
+routes_controller.constructLinestring(1);
 export default router;

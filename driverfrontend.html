@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Driver App</title>
+  <script src="https://cdn.socket.io/4.7.1/socket.io.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    #status { margin-bottom: 10px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Driver App 🚍</h1>
+  <p id="status">Connecting...</p>
+  <button id="endTripBtn">End Trip</button>
+
+  <script>
+    const vehicleId = "2";      // Replace with actual vehicle ID
+    const userId = "4";        // Replace with actual driver/user ID
+    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwidXNlcm5hbWUiOiJzYjEiLCJyb2xlIjoiZHJpdmVyIiwidmVoaWNsZUlkIjoyLCJpYXQiOjE3NTc2MDg1NTgsImV4cCI6MTc1NzYxMjE1OH0.UD_1LR0tnH8korpxnKyfD1ZlOlKMoRxEtv3EhRinZVY"; // <-- Replace this with your JWT token
+
+    const statusEl = document.getElementById("status");
+    const endTripBtn = document.getElementById("endTripBtn");
+
+    // Connect to Socket.IO backend
+    const socket = io("http://localhost:3000", {
+      auth: { token }
+    });
+
+    socket.on("connect", () => {
+      statusEl.innerText = "Connected. Trip started!";
+      console.log("Connected to server, trip started.");
+
+      // Start sending location updates
+      if (navigator.geolocation) {
+        navigator.geolocation.watchPosition(
+          (pos) => {
+            const { latitude, longitude, speed, accuracy } = pos.coords;
+
+            socket.emit("driverLocation", {
+              lat: latitude,
+              lng: longitude,
+              speed: speed || 0,
+              accuracy: accuracy || 0
+            });
+
+            console.log("Location sent:", latitude, longitude);
+          },
+          (err) => console.error("Geolocation error:", err),
+          { enableHighAccuracy: true, maximumAge: 1, timeout: 5000 }
+        );
+      } else {
+        alert("Geolocation not supported in your browser");
+      }
+    });
+
+    socket.on("disconnect", () => {
+      statusEl.innerText = "Disconnected from server";
+      console.log("Disconnected from server");
+    });
+
+    // Optional: end trip manuallyz
+    endTripBtn.onclick = () => {
+      socket.emit("driver:end_trip"); // Make sure backend listens to this
+      statusEl.innerText = "Trip ended!";
+      console.log("Trip ended manually");
+    };
+  </script>
+</body>
+</html>

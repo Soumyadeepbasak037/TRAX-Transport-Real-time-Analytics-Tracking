@@ -70,17 +70,23 @@ export const insertRouteStops = async (req, res) => {
 };
 
 export const constructLinestring = async (routeID) => {
-  const query = `SELECT r.route_id,
-       r.vehicle_number,
-       ST_MakeLine(s.location ORDER BY rs.stop_order) AS route_line,
-       ST_Length(ST_MakeLine(s.location ORDER BY rs.stop_order)::geography) / 1000 AS distance_km
-FROM routes r
-JOIN route_stops rs ON r.route_id = rs.route_id
-JOIN stops s ON rs.stop_id = s.stop_id
-WHERE r.route_id = $1
-GROUP BY r.route_id, r.route_name;
-`;
+  const query = `
+    SELECT r.route_id,
+           r.vehicle_number,
+           ST_AsGeoJSON(
+             ST_MakeLine(s.location::geometry ORDER BY rs.stop_order)
+           ) AS route_line,
+           ST_Length(
+             ST_MakeLine(s.location::geometry ORDER BY rs.stop_order)::geography
+           ) / 1000 AS distance_km
+    FROM routes r
+    JOIN route_stops rs ON r.route_id = rs.route_id
+    JOIN stops s ON rs.stop_id = s.stop_id
+    WHERE r.route_id = $1
+    GROUP BY r.route_id, r.vehicle_number;
+  `;
 
   const result = await db.query(query, [routeID]);
-  console.log(result);
+  console.log(result.rows[0]);
+  return result.rows[0];
 };
