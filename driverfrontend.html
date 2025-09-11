@@ -10,11 +10,9 @@
   <p>Status: <span id="status">Connecting...</span></p>
 
   <script>
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwidXNlcm5hbWUiOiJzYjEiLCJyb2xlIjoiZHJpdmVyIiwidmVoaWNsZUlkIjoyLCJpYXQiOjE3NTc2MTA1MzMsImV4cCI6MTc1NzYxNDEzM30.9zsOFUONrf1SkSFmhiOxkhW44hMg3TJyvbk-fcRlKwE"; // 🔹 Replace with actual driver JWT
-  const socket = io("https://localhost:3000", {
+    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwidXNlcm5hbWUiOiJzYjEiLCJyb2xlIjoiZHJpdmVyIiwidmVoaWNsZUlkIjoyLCJpYXQiOjE3NTc2MTU1OTcsImV4cCI6MTc1NzYxOTE5N30.a5hwOuHXxdRrfioHu4yu_H4Sql4lCpG5pUvpC9jiEs8"; // 🔹 Replace with actual driver JWT
+  const socket = io("http://localhost:3000", {
   auth: { token: token },
-  transports: ["websocket"], // force websocket
-  secure: true
 });
 
     socket.on("connect", () => {

@@ -20,12 +20,10 @@
 
   <script>
     // Replace with a real passenger JWT
-    const passengerToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwidXNlcm5hbWUiOiJzYl90aGVfcGFzc2VuZ2VyIiwicm9sZSI6InBhc3NlbmdlciIsInZlaGljbGVJZCI6bnVsbCwiaWF0IjoxNzU3NjEyMzQwLCJleHAiOjE3NTc2MTU5NDB9.zaGmvNQO6_R4ceVFirGtKQczzFsOGEAKcsQtVTNwArU";
+    const passengerToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwidXNlcm5hbWUiOiJzYl90aGVfcGFzc2VuZ2VyIiwicm9sZSI6InBhc3NlbmdlciIsInZlaGljbGVJZCI6bnVsbCwiaWF0IjoxNzU3NjE1OTQwLCJleHAiOjE3NTc2MTk1NDB9.HYSJZCSME96NfnCRDVsbjcS8l2Fsexh4uiAwENn_wsA";
 
-   const socket = io("https://localhost:3000", {
-  auth: { token: passengerToken },
-  transports: ["websocket"], 
-  secure: true
+   const socket = io("http://localhost:3000", {
+    auth: { token: passengerToken },
 });
 
     const statusDiv = document.getElementById("status");
