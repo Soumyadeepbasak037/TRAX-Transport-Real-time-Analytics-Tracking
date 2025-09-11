@@ -34,26 +34,38 @@ export const insertRouteStops = async (req, res) => {
     "stop_name_array": [1, 3, 5, 7, 9]
     }
     */
-    const { vehicle_no, stop_name_array } = req.body;
+    const { vehicle_no, stop_id_array } = req.body;
 
-    const get_stop_id_Query = `
+    const get_stop_Query = `
       SELECT * 
       FROM stops 
       WHERE stop_id = ANY($1::int[])
     `;
 
-    const result = await db.query(get_stop_id_Query, [stop_name_array]);
+    const result = await db.query(get_stop_Query, [stop_id_array]);
 
-    const inserIntoRoutes = `INSERT INTO routes (vehicle_number,start_point,end_point) VALUES ($1,$2,$3)`;
+    const inserIntoRoutes = `INSERT INTO routes (vehicle_number) VALUES ($1) RETURNING routes_id`;
 
-    const insertResults = await db.query(inserIntoRoutes, [
-      vehicle_no,
-      stop_name_array[0],
-      stop_name_array[stop_name_array.length - 1],
-    ]);
+    const insertResults = await db.query(inserIntoRoutes, [vehicle_no]);
 
-    console.log(result);
-    res.json({ message: Success });
+    console.log(insertResults);
+
+    const insertedRowID = insertResults.rows[0].route_id;
+
+    let stop_order = 0;
+    const insertIntoRouteStops = `INSERT INTO route_stops (route_id,stop_id,stop_order) VALUES ($1,$2,$3)`;
+
+    for (const stop of stop_id_array) {
+      const route_id = insertedRowID;
+      stop_id = stop_id_array[stop_order];
+      const result = await db.query(insertIntoRouteStops, [
+        route_id,
+        stop_id,
+        stop_order,
+      ]);
+      stop_order += 1;
+    }
+    res.json({ message: "Routes Managewd successfully" });
   } catch (err) {
     res.json({ message: err });
   }
