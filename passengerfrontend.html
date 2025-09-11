@@ -1,46 +1,62 @@
-
-<!-- passenger.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Passenger App</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  <script src="https://cdn.socket.io/4.7.1/socket.io.min.js"></script>
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <style>
-    #map { height: 90vh; width: 100%; }
-  </style>
+  <meta charset="UTF-8" />
+  <title>Passenger App 🚌</title>
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 </head>
 <body>
   <h1>Passenger App 🚌</h1>
-  <div id="map"></div>
+  <div id="status">Connecting...</div>
+
+  <div>
+    <label for="vehicleId">Vehicle ID:</label>
+    <input type="text" id="vehicleId" placeholder="Enter vehicle ID" />
+    <button id="joinBtn">Join Vehicle</button>
+  </div>
+
+  <h2>Live Updates:</h2>
+  <div id="updates"></div>
 
   <script>
-    const vehicleId = "2"; // Vehicle passenger wants to track
-    const socket = io("http://localhost:3000");
+    // Replace with a real passenger JWT
+    const passengerToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwidXNlcm5hbWUiOiJzYl90aGVfcGFzc2VuZ2VyIiwicm9sZSI6InBhc3NlbmdlciIsInZlaGljbGVJZCI6bnVsbCwiaWF0IjoxNzU3NjEyMzQwLCJleHAiOjE3NTc2MTU5NDB9.zaGmvNQO6_R4ceVFirGtKQczzFsOGEAKcsQtVTNwArU";
 
-    // Map setup
-    const map = L.map('map').setView([22.5726, 88.3639], 12);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19
-    }).addTo(map);
+   const socket = io("https://localhost:3000", {
+  auth: { token: passengerToken },
+  transports: ["websocket"], 
+  secure: true
+});
 
-    let marker = null;
+    const statusDiv = document.getElementById("status");
+    const updatesDiv = document.getElementById("updates");
 
-    // Join vehicle room
-    socket.emit("passenger:join", { vehicleId });
+    socket.on("connect", () => {
+      statusDiv.innerText = "✅ Connected to server";
+    });
 
-    // Listen for vehicle location
-    socket.on("vehicleLocationUpdate", (data) => {
-      const { latitude, longitude } = data;
-      if (!marker) {
-        marker = L.marker([latitude, longitude]).addTo(map);
-      } else {
-        marker.setLatLng([latitude, longitude]);
+    socket.on("disconnect", () => {
+      statusDiv.innerText = "❌ Disconnected";
+    });
+
+    document.getElementById("joinBtn").onclick = () => {
+      const vehicleId = 2;
+      if (vehicleId) {
+        socket.emit("passenger:join", { vehicleId });
+        updatesDiv.innerHTML += `<p>📡 Joined vehicle room ${vehicleId}</p>`;
       }
-      map.panTo([latitude, longitude]);
-      console.log("Vehicle location:", latitude, longitude);
+    };
+
+    socket.on("vehicleLocationUpdate", (data) => {
+      console.log(data)
+      updatesDiv.innerHTML += `
+        <p>
+          🚍 Vehicle ${data.vehicleId} | 
+          Lat: ${data.lat.toFixed(5)}, 
+          Lng: ${data.lng.toFixed(5)}, 
+          Speed: ${data.speed?.toFixed(1) ?? "N/A"} m/s
+        </p>
+      `;
     });
   </script>
 </body>
