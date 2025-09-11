@@ -71,4 +71,18 @@ export const insertRouteStops = async (req, res) => {
   }
 };
 
-const manageRoutestable = async () => {};
+export const constructLinestring = async (routeID) => {
+  const query = `SELECT r.route_id,
+       r.route_name,
+       ST_MakeLine(s.location ORDER BY rs.stop_order) AS route_line,
+       ST_Length(ST_MakeLine(s.location ORDER BY rs.stop_order)::geography) / 1000 AS distance_km
+FROM routes r
+JOIN route_stops rs ON r.route_id = rs.route_id
+JOIN stops s ON rs.stop_id = s.id
+WHERE r.route_id = 1
+GROUP BY r.route_id, r.route_name;
+`;
+
+  const result = await db.query(query, [routeID]);
+  console.log(result);
+};
