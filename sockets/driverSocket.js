@@ -9,7 +9,7 @@ const driverHandler = async (io, socket) => {
   socket.join(socket.vehicleId);
   console.log(`Driver ${socket.userId} joined vehicle ${socket.vehicleId}`);
 
-  // 1️⃣ Get vehicle number
+  // Get vehicle number
   const vehicleNumberQuery = `SELECT vehicle_number FROM vehicles WHERE vehicle_id = $1`;
   const vehicleResult = await db.query(vehicleNumberQuery, [socket.vehicleId]);
   if (vehicleResult.rows.length === 0) {
@@ -18,7 +18,7 @@ const driverHandler = async (io, socket) => {
   }
   const vehicle_number = vehicleResult.rows[0].vehicle_number;
 
-  // 2️⃣ Get route_id for this vehicle_number
+  // Get route_id for this vehicle_number
   const routeQuery = `SELECT route_id FROM routes WHERE vehicle_number = $1`;
   const routeResult = await db.query(routeQuery, [vehicle_number]);
   if (routeResult.rows.length === 0) {
@@ -27,7 +27,7 @@ const driverHandler = async (io, socket) => {
   }
   const route_id = routeResult.rows[0].route_id;
 
-  // 3️⃣ Insert a new trip
+  //Insert a new trip
   const tripInsertQuery = `
     INSERT INTO trips (route_id, vehicle_id, start_time, status)
     VALUES ($1, $2, NOW(), 'ongoing')
@@ -41,7 +41,7 @@ const driverHandler = async (io, socket) => {
   socket.tripId = trip_id;
   console.log(`Trip ${trip_id} started for vehicle ${vehicle_number}`);
 
-  // 4️⃣ Listen for driver's location updates
+  //Listen for driver's location updates
   socket.on("driverLocation", async (data) => {
     // Use lat/lng from frontend payload
     const { lat, lng, speed = 0, accuracy = 0 } = data;
@@ -83,7 +83,7 @@ const driverHandler = async (io, socket) => {
     }
   });
 
-  // 5️⃣ Complete trip on disconnect
+  //Complete trip on disconnect
   socket.on("disconnect", async () => {
     try {
       if (socket.tripId) {

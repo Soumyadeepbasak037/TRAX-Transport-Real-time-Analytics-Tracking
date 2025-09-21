@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -10,21 +10,21 @@
   <p>Status: <span id="status">Connecting...</span></p>
 
   <script>
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwidXNlcm5hbWUiOiJzYjEiLCJyb2xlIjoiZHJpdmVyIiwidmVoaWNsZUlkIjoyLCJpYXQiOjE3NTc2MTU1OTcsImV4cCI6MTc1NzYxOTE5N30.a5hwOuHXxdRrfioHu4yu_H4Sql4lCpG5pUvpC9jiEs8"; // 🔹 Replace with actual driver JWT
+    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwidXNlcm5hbWUiOiJzYjEiLCJyb2xlIjoiZHJpdmVyIiwidmVoaWNsZUlkIjoyLCJpYXQiOjE3NTg0MzA5NzQsImV4cCI6MTc1ODQzNDU3NH0.rvSvmJq9fVnPfDY1XMwt4PitGfGh2JC8rKLkRI1hfiA"; // 🔹 Replace with actual driver JWT
   const socket = io("http://localhost:3000", {
   auth: { token: token },
 });
 
     socket.on("connect", () => {
-      document.getElementById("status").innerText = "Connected ✅";
+      document.getElementById("status").innerText = "Connected";
       console.log("Driver connected to backend");
     });
 
     socket.on("disconnect", () => {
-      document.getElementById("status").innerText = "Disconnected ❌";
+      document.getElementById("status").innerText = "Disconnected";
     });
 
-    // 🔹 Function to send current location
+    // Function to send current location
     function sendLocation() {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
@@ -50,8 +50,79 @@
       }
     }
 
-    // 🔹 Send location every 1.5 seconds regardless of movement
+    // Send location every 1.5 seconds regardless of movement
     setInterval(sendLocation, 1500);
+  </script>
+</body>
+</html> -->
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Driver Frontend</title>
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+</head>
+<body>
+  <h1>Driver App</h1>
+  <p>Status: <span id="status">Connecting...</span></p>
+
+  <script>
+    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwidXNlcm5hbWUiOiJzYjEiLCJyb2xlIjoiZHJpdmVyIiwidmVoaWNsZUlkIjoyLCJpYXQiOjE3NTg0MzA5NzQsImV4cCI6MTc1ODQzNDU3NH0.rvSvmJq9fVnPfDY1XMwt4PitGfGh2JC8rKLkRI1hfiA"; // 🔹 Replace with actual driver JWT
+
+    // Connect to backend
+    const socket = io("http://192.168.0.104:3000", {
+      auth: { token: token },
+    });
+
+    socket.on("connect", () => {
+      document.getElementById("status").innerText = "Connected";
+      console.log("Driver connected to backend");
+    });
+
+    socket.on("disconnect", () => {
+      document.getElementById("status").innerText = "Disconnected";
+    });
+
+    //Cache for latest location
+    let latestLocation = null;
+
+    //Start watching location ONCE
+    if ("geolocation" in navigator) {
+      const watchId = navigator.geolocation.watchPosition(
+        (position) => {
+          latestLocation = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+            speed: position.coords.speed || 0,
+            accuracy: position.coords.accuracy || 0,
+            timestamp: Date.now(),
+          };
+        },
+        (error) => {
+          console.error("Geolocation error:", error);
+        },
+        { enableHighAccuracy: true }
+      );
+
+      //Send latest location every 1.5s (even if unchanged)
+      setInterval(() => {
+        if (latestLocation) {
+          socket.emit("driverLocation", latestLocation);
+          console.log("Location sent:", latestLocation.lat, latestLocation.lng);
+        }
+      }, 1500);
+
+      //  cleanup when window closes
+      window.addEventListener("beforeunload", () => {
+        navigator.geolocation.clearWatch(watchId);
+      });
+    } else {
+      console.error("Geolocation is not supported by this browser.");
+    }
   </script>
 </body>
 </html>

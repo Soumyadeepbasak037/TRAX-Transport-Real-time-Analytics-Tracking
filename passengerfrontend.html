@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Passenger App 🚌</title>
+  <title>Passenger App</title>
   <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 </head>
 <body>
-  <h1>Passenger App 🚌</h1>
+  <h1>Passenger App</h1>
   <div id="status">Connecting...</div>
 
   <div>
@@ -20,9 +20,9 @@
 
   <script>
     // Replace with a real passenger JWT
-    const passengerToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwidXNlcm5hbWUiOiJzYl90aGVfcGFzc2VuZ2VyIiwicm9sZSI6InBhc3NlbmdlciIsInZlaGljbGVJZCI6bnVsbCwiaWF0IjoxNzU3NjE1OTQwLCJleHAiOjE3NTc2MTk1NDB9.HYSJZCSME96NfnCRDVsbjcS8l2Fsexh4uiAwENn_wsA";
+    const passengerToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwidXNlcm5hbWUiOiJzYl90aGVfcGFzc2VuZ2VyIiwicm9sZSI6InBhc3NlbmdlciIsInZlaGljbGVJZCI6bnVsbCwiaWF0IjoxNzU4NDMxMDAxLCJleHAiOjE3NTg0MzQ2MDF9.syyPMCsZQeP1AISbgVJ1ygRfncBDJsUMipOcw4qEh90"
 
-   const socket = io("http://localhost:3000", {
+   const socket = io("http://192.168.0.104:3000", {
     auth: { token: passengerToken },
 });
 
@@ -30,18 +30,18 @@
     const updatesDiv = document.getElementById("updates");
 
     socket.on("connect", () => {
-      statusDiv.innerText = "✅ Connected to server";
+      statusDiv.innerText = "Connected to server";
     });
 
     socket.on("disconnect", () => {
-      statusDiv.innerText = "❌ Disconnected";
+      statusDiv.innerText = "Disconnected";
     });
 
     document.getElementById("joinBtn").onclick = () => {
       const vehicleId = 2;
       if (vehicleId) {
         socket.emit("passenger:join", { vehicleId });
-        updatesDiv.innerHTML += `<p>📡 Joined vehicle room ${vehicleId}</p>`;
+        updatesDiv.innerHTML += `<p>Joined vehicle room ${vehicleId}</p>`;
       }
     };
 
@@ -49,7 +49,7 @@
       console.log(data)
       updatesDiv.innerHTML += `
         <p>
-          🚍 Vehicle ${data.vehicleId} | 
+          Vehicle ${data.vehicleId} | 
           Lat: ${data.lat.toFixed(5)}, 
           Lng: ${data.lng.toFixed(5)}, 
           Speed: ${data.speed?.toFixed(1) ?? "N/A"} m/s
