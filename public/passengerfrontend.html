@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Passenger App</title>
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+</head>
+<body>
+  <h1>Passenger App</h1>
+  <div id="status">Connecting...</div>
+
+  <div>
+    <label for="vehicleId">Vehicle ID:</label>
+    <input type="text" id="vehicleId" placeholder="Enter vehicle ID" />
+    <button id="joinBtn">Join Vehicle</button>
+  </div>
+
+  <h2>Live Updates:</h2>
+  <div id="updates"></div>
+
+  <script>
+    // Replace with a real passenger JWT
+    const passengerToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwidXNlcm5hbWUiOiJzYl90aGVfcGFzc2VuZ2VyIiwicm9sZSI6InBhc3NlbmdlciIsInZlaGljbGVJZCI6bnVsbCwiaWF0IjoxNzU5MzIxNTg1LCJleHAiOjE3NTkzMjUxODV9.mZrwIptfLWF85S2fe1SLuoI5nwq8UjKMqFxQuz7v9Rs"
+   const socket = io("https://2k6jjds5-3000.inc1.devtunnels.ms", {
+    auth: { token: passengerToken },
+});
+
+    const statusDiv = document.getElementById("status");
+    const updatesDiv = document.getElementById("updates");
+
+    socket.on("connect", () => {
+      statusDiv.innerText = "Connected to server";
+    });
+
+    socket.on("disconnect", () => {
+      statusDiv.innerText = "Disconnected";
+    });
+
+    document.getElementById("joinBtn").onclick = () => {
+      const vehicleId = 2;
+      if (vehicleId) {
+        socket.emit("passenger:join", { vehicleId });
+        updatesDiv.innerHTML += `<p>Joined vehicle room ${vehicleId}</p>`;
+      }
+    };
+
+    socket.on("vehicleLocationUpdate", (data) => {
+      console.log(data)
+      updatesDiv.innerHTML += `
+        <p>
+          Vehicle ${data.vehicleId} | 
+          Lat: ${data.lat.toFixed(5)}, 
+          Lng: ${data.lng.toFixed(5)}, 
+          Speed: ${data.speed?.toFixed(1) ?? "N/A"} m/s
+        </p>
+      `;
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+Project not yet comepleted
+
+->start pg server
+->start server.js
+->port forward 3000
+->copy link in driver and passenger frontend
+->login through postman
+->insert jwt in friver and passenger frontend
