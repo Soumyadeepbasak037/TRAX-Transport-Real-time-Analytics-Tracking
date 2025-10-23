@@ -7,7 +7,6 @@ const passengerHandler = (io, socket) => {
     console.log(`Passenger ${socket.id} joined vehicle room ${vehicleId}`);
   });
 
-  // Optional: handle passenger disconnect
   socket.on("disconnect", () => {
     console.log(`Passenger ${socket.id} disconnected`);
   });

@@ -15,6 +15,7 @@ const io = new Server(server, {
   cors: { origin: "*" },
 });
 
+app.use(express.static("public")); // put your HTML files in ./public
 app.use(express.json());
 
 // // Middleware to modify the request object and attach the io property to it,
@@ -40,9 +41,8 @@ io.use((socket, next) => {
     const payload = jwt.verify(token, SECRET_KEY);
 
     socket.role = payload.role;
-    socket.userId = payload.id; // lowercase 'd'
+    socket.userId = payload.id;
     if (payload.vehicleId != null) {
-      // match the JWT property exactly
       socket.vehicleId = payload.vehicleId;
     }
 

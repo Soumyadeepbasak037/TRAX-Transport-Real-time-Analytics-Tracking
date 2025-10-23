@@ -71,8 +71,7 @@
   <p>Status: <span id="status">Connecting...</span></p>
 
   <script>
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwidXNlcm5hbWUiOiJzYjEiLCJyb2xlIjoiZHJpdmVyIiwidmVoaWNsZUlkIjoyLCJpYXQiOjE3NTg0MzA5NzQsImV4cCI6MTc1ODQzNDU3NH0.rvSvmJq9fVnPfDY1XMwt4PitGfGh2JC8rKLkRI1hfiA"; // 🔹 Replace with actual driver JWT
-
+    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwidXNlcm5hbWUiOiJzYjEiLCJyb2xlIjoiZHJpdmVyIiwidmVoaWNsZUlkIjoyLCJpYXQiOjE3NTkyOTk3ODUsImV4cCI6MTc1OTMwMzM4NX0.z2UbTMdHW_GL7veCoOpHbONl7wqFFNG-6yT7cDZqxOA"
     // Connect to backend
     const socket = io("http://192.168.0.104:3000", {
       auth: { token: token },

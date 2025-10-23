@@ -5,4 +5,4 @@ Project not yet comepleted
 ->port forward 3000
 ->copy link in driver and passenger frontend
 ->login through postman
-->insert jwt in friver and passenger frontend
+->insert jwt in driver and passenger frontend

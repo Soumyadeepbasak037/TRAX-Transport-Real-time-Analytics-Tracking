@@ -43,7 +43,6 @@ const driverHandler = async (io, socket) => {
 
   //Listen for driver's location updates
   socket.on("driverLocation", async (data) => {
-    // Use lat/lng from frontend payload
     const { lat, lng, speed = 0, accuracy = 0 } = data;
 
     if (lat == null || lng == null) {
@@ -60,15 +59,15 @@ const driverHandler = async (io, socket) => {
       await db.query(insertQuery, [
         socket.vehicleId,
         socket.tripId,
-        lng, // longitude first
-        lat, // latitude second
+        lng,
+        lat,
         speed,
         accuracy,
       ]);
 
-      console.log(
-        `Location update stored for vehicle ${socket.vehicleId} (Trip ${socket.tripId})`
-      );
+      // console.log(
+      //   `Location update stored for vehicle ${socket.vehicleId} (Trip ${socket.tripId})`
+      // );
 
       io.to(socket.vehicleId).emit("vehicleLocationUpdate", {
         vehicleId: socket.vehicleId,
