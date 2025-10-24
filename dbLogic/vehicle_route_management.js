@@ -53,9 +53,9 @@ export const addNewRoute = async (stopID_arr, vehicle_number, description) => {
         );
         console.log(`Stopid : ${stopID} , INDEX: ${index}`);
       }
-      await client.query("COMMIT"); // ✅ commit all changes
+      await client.query("COMMIT");
     } catch (err) {
-      await db.query("ROLLBACK"); // ❌ revert everything if error
+      await db.query("ROLLBACK");
       console.error("Transaction failed:", err);
       throw err;
     }
