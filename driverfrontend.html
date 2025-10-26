@@ -115,7 +115,7 @@
         }
       }, 1500);
 
-      //  cleanup when window closes
+      //  cleanup 
       window.addEventListener("beforeunload", () => {
         navigator.geolocation.clearWatch(watchId);
       });
