@@ -16,6 +16,6 @@ export const singleHopSuggestion = async (srcStopID, destStopID) => {
     return err;
   }
 };
-export const multiHopSuggestion = (async) => {};
+export const multiHopSuggestion = async () => {};
 
-await singleHopSuggestion();
+// await singleHopSuggestion();
