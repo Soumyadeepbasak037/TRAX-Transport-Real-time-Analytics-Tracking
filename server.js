@@ -7,6 +7,7 @@ import routeManager from "./routes/routesRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import driverSocketHandler from "./sockets/driverSocket.js";
 import passengerSocketHandler from "./sockets/passengerSocket.js";
+import suggestionManager from "./routes/suggestionroutes.js";
 const SECRET_KEY = "hehe";
 
 const app = express();
@@ -19,7 +20,7 @@ app.use(express.static("public")); // put your HTML files in ./public
 app.use(express.json());
 
 // // Middleware to modify the request object and attach the io property to it,
-// // in order to make it available to all routes. (Optional: move to separate file later)
+// // in order to make it available to all routes.
 // app.use((req, res, next) => {
 //   req.io = io;
 //   next();
@@ -70,8 +71,8 @@ app.get("/", (req, res) => {
 
 //Routes
 app.use("/api/auth", authRoutes);
-app.use("/api/RouteManagement", routeManager);
-
+app.use("/api/routeManagement", routeManager);
+app.use("/api/suggestion", suggestionManager);
 server.listen(3000, () => {
   console.log("Server listening on port 3000");
 });

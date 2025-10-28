@@ -1,15 +1,15 @@
 import express from "express";
 import * as routes_controller from "../controllers/routesController.js";
 import auth_middleware from "../middlewares/authMiddleware.js";
-import roleMiddleware from "../middlewares/roleValidationMiddleware.js";
+// import roleMiddleware from "../middlewares/roleValidationMiddleware.js";
 const router = express.Router();
 
-router.post("/insertStops", auth_middleware, routes_controller.insertStops);
+router.post("/insertStops", auth_middleware, routes_controller.createStops);
+
 router.post(
   "/insertRouteStops",
   auth_middleware,
-  routes_controller.insertRouteStops
+  routes_controller.createRoute
 );
 
-routes_controller.constructLinestring(1);
 export default router;
