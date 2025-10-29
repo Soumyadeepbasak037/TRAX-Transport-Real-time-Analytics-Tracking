@@ -6,9 +6,7 @@ export default function App() {
   const [status, setStatus] = useState("Connecting...");
   const [position, setPosition] = useState(null);
 
-  // Replace with your own driver JWT
-  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwidXNlcm5hbWUiOiJzYjEiLCJyb2xlIjoiZHJpdmVyIiwidmVoaWNsZUlkIjoyLCJpYXQiOjE3NTk2OTIzMDgsImV4cCI6MTc1OTY5NTkwOH0.wJJnVZ3nqICVvwJf07lxfZIEBl8C5Xd0y5w6rsH0c1I"
-  // 🔹 Use your backend URL (ngrok or local)
+  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwidXNlcm5hbWUiOiJzYjEiLCJyb2xlIjoiZHJpdmVyIiwidmVoaWNsZUlkIjoyLCJpYXQiOjE3NjE3NDY1NTYsImV4cCI6MTc2MTc1MDE1Nn0.c22aH2KgkEw4HMc5oOVEo9E9A8JEvM1djG5TQAoyzTU"
   const BACKEND_URL = "localhost:3000";
 
   useEffect(() => {
@@ -17,12 +15,12 @@ export default function App() {
     });
 
     socket.on("connect", () => {
-      console.log("✅ Connected to backend");
+      console.log("Connected to backend");
       setStatus("Connected");
     });
 
     socket.on("disconnect", () => {
-      console.log("❌ Disconnected");
+      console.log("Disconnected");
       setStatus("Disconnected");
     });
 

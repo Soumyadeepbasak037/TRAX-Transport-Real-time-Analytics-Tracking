@@ -204,7 +204,7 @@ export const constructLinestring = async (routeID) => {
   return result.rows[0];
 };
 
-console.log(await GetStopID(["Howrah Station", "Esplanade"]));
+// console.log(await GetStopID(["Howrah Station", "Esplanade"]));
 
 // await addNewRoute(
 //   await GetStopID(["Howrah Station", "Esplanade"]),

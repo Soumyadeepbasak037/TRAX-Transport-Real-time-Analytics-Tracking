@@ -9,8 +9,7 @@ export default function PassengerApp() {
   const [socket, setSocket] = useState(null);
 
   const passengerToken =
-   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwidXNlcm5hbWUiOiJzYl90aGVfcGFzc2VuZ2VyIiwicm9sZSI6InBhc3NlbmdlciIsInZlaGljbGVJZCI6bnVsbCwiaWF0IjoxNzU5NjkxODI4LCJleHAiOjE3NTk2OTU0Mjh9.aIeFFpNb_tarFEGvXtnN9eQFYhxB1xQTFYzE6K7piWE"
-  // Change this to your backend ngrok URL
+   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwidXNlcm5hbWUiOiJzYl90aGVfcGFzc2VuZ2VyIiwicm9sZSI6InBhc3NlbmdlciIsInZlaGljbGVJZCI6bnVsbCwiaWF0IjoxNzYxNzQ2NTIyLCJleHAiOjE3NjE3NTAxMjJ9.dpw-ZQ-8usquBE_dM8Df4FR_Cix-x3C3uRXuEutYyzM"
   const BACKEND_URL = "localhost:3000";
 
   useEffect(() => {

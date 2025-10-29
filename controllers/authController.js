@@ -14,7 +14,6 @@ const registerSchema = Joi.object({
   role: Joi.string().min(3).max(10).required(),
 });
 
-//Registration
 export const register = async (req, res) => {
   const {
     username,
