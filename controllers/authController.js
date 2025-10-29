@@ -6,7 +6,6 @@ import * as helper from "../helper_functions/helper.js";
 // Move this to .env in production
 const SECRET_KEY = "hehe";
 
-// Register Schema
 const registerSchema = Joi.object({
   username: Joi.string().min(3).max(30).required(),
   password: Joi.string().min(6).required(),
@@ -78,7 +77,6 @@ export const register = async (req, res) => {
   }
 };
 
-// Login Schema
 const loginSchema = Joi.object({
   username: Joi.string().min(3).max(30).required(),
   password: Joi.string().min(6).required(),
