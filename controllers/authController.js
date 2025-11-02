@@ -20,6 +20,7 @@ export const register = async (req, res) => {
     email,
     role,
     vehicle_number,
+    vehicle_plate_number,
     vehicle_type,
     vehicle_capacity,
     driver_name,
@@ -52,7 +53,9 @@ export const register = async (req, res) => {
       const inserted_vehicle_id = await helper.insertNewVehicle(
         vehicle_number,
         vehicle_type,
-        vehicle_capacity
+        vehicle_capacity,
+        vehicle_plate_number
+        //also have to insert driver_license_number in the vehicle.plate_number ->done
       );
       const inserted_driver_id = await helper.insertNewDriver(
         user_id,

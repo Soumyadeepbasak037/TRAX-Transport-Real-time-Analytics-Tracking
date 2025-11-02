@@ -22,13 +22,19 @@ export const insertNewDriver = async (
     return err;
   }
 };
-export const insertNewVehicle = async (vehicle_number, type, capacity) => {
+export const insertNewVehicle = async (
+  vehicle_number,
+  type,
+  capacity,
+  vehicle_plate_number
+) => {
   try {
-    const insertQuery = `INSERT INTO vehicles (vehicle_number,type,capacity) VALUES ($1,$2,$3) RETURNING vehicle_id`;
+    const insertQuery = `INSERT INTO vehicles (vehicle_number,type,capacity,vehicle_plate_number) VALUES ($1,$2,$3,$4) RETURNING vehicle_id`;
     const result = await db.query(insertQuery, [
       vehicle_number,
       type,
       capacity,
+      vehicle_plate_number,
     ]);
     console.log(result);
     return result.rows[0].vehicle_id;
