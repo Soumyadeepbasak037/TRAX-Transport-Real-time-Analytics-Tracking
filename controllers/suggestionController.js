@@ -7,7 +7,7 @@ export const singlehopsuggestion = async (req, res) => {
     const result = await singleHopSuggestion(src_id, dest_id);
     console.log("Result:", result);
     console.log("Rows:", result.rows);
-    return res.json({ success: true, message: result.rows[0] });
+    return res.json({ success: true, message: result.rows });
   } catch (err) {
     res.status(500).json({
       success: false,
