@@ -8,9 +8,8 @@ export default function PassengerApp() {
   const [updates, setUpdates] = useState([]);
   const [socket, setSocket] = useState(null);
 
-  const passengerToken =
-   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwidXNlcm5hbWUiOiJzYl90aGVfcGFzc2VuZ2VyIiwicm9sZSI6InBhc3NlbmdlciIsInZlaGljbGVJZCI6bnVsbCwiaWF0IjoxNzYxNzQ2NTIyLCJleHAiOjE3NjE3NTAxMjJ9.dpw-ZQ-8usquBE_dM8Df4FR_Cix-x3C3uRXuEutYyzM"
-  const BACKEND_URL = "localhost:3000";
+  const passengerToken =  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwidXNlcm5hbWUiOiJzYl90aGVfcGFzc2VuZ2VyIiwicm9sZSI6InBhc3NlbmdlciIsInZlaGljbGVJZCI6bnVsbCwiaWF0IjoxNzYyMDkxMjg0LCJleHAiOjE3NjIwOTQ4ODR9.I4T9tnz2W64lFppiG9uXEBammy2lW74WraiYEyNQW_g"
+  const BACKEND_URL = "https://trax-transport-real-time-analytics.onrender.com";
 
   useEffect(() => {
     const s = io(BACKEND_URL, {
