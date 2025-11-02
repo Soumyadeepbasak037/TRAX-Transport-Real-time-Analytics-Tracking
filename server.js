@@ -8,6 +8,10 @@ import authRoutes from "./routes/authRoutes.js";
 import driverSocketHandler from "./sockets/driverSocket.js";
 import passengerSocketHandler from "./sockets/passengerSocket.js";
 import suggestionManager from "./routes/suggestionroutes.js";
+import dotenv from "dotenv";
+
+dotenv.config();
+// console.log(process.env);
 const SECRET_KEY = "hehe";
 
 const app = express();
@@ -73,6 +77,6 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/routeManagement", routeManager);
 app.use("/api/suggestion", suggestionManager);
-server.listen(3000, () => {
-  console.log("Server listening on port 3000");
+server.listen(process.env.PORT, () => {
+  console.log(`Server listening on port ${process.env.PORT}`);
 });
