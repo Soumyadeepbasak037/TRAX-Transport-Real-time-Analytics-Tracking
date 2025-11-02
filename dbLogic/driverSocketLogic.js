@@ -22,6 +22,13 @@ export const startTrip = async (routeId, vehicleId) => {
   return result.rows[0]?.trip_id || null;
 };
 
+export const registerSocket = async (socketID) => {
+  const query = `INSERT INTO active_sockets (socketid) VALUES ($1) RETURNING id`;
+  const result = await db.query(query, [socketID]);
+  return result.rows[0].id;
+};
+
+export const add_passenger = async () => {};
 export const insertVehiclePosition = async (
   vehicleId,
   tripId,

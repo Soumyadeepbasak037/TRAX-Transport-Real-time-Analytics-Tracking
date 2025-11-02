@@ -111,7 +111,7 @@ export const login = async (req, res) => {
     if (user.role == "driver") {
       const joinQuery = `select u.user_id,u.role,
                       d.driver_id,
-                      v.vehicle_id,v.vehicle_number 
+                      v.vehicle_id,v.vehicle_number
                       from users as u 
                       inner join drivers as d 
                       on u.user_id = d.user_id 
