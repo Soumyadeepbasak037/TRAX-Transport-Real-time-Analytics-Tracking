@@ -23,12 +23,35 @@ export const startTrip = async (routeId, vehicleId) => {
 };
 
 export const registerSocket = async (socketID) => {
-  const query = `INSERT INTO active_sockets (socketid) VALUES ($1) RETURNING id`;
-  const result = await db.query(query, [socketID]);
+  //socketId === vehicle id for my case
+  const status = "active";
+  const query = `INSERT INTO active_sockets (socketid,status) VALUES ($1,$2) RETURNING id`;
+  const result = await db.query(query, [socketID, status]);
   return result.rows[0].id;
 };
 
-export const add_passenger = async () => {};
+export const add_passenger = async (socketID) => {
+  const checkQuery = `
+    SELECT * FROM active_sockets
+    WHERE socketid = $1 AND status = 'active'
+  `;
+  const checkResult = await db.query(checkQuery, [socketID]);
+
+  if (checkResult.rows.length === 0) {
+    throw new Error("No active socket found");
+  }
+
+  const updateQuery = `
+    UPDATE active_sockets
+    SET passenger_count = passenger_count + 1
+    WHERE socketid = $1 AND status = 'active'
+    RETURNING id, passenger_count
+  `;
+  const updateResult = await db.query(updateQuery, [socketID]);
+
+  return updateResult.rows[0];
+};
+
 export const insertVehiclePosition = async (
   vehicleId,
   tripId,
