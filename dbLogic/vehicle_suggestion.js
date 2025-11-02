@@ -10,7 +10,7 @@ export const singleHopSuggestion = async (srcStopID, destStopID) => {
   try {
     const result = await db.query(suggestion_query, [srcStopID, destStopID]);
     console.log(result.rows);
-    return result.rows;
+    return result;
   } catch (err) {
     console.log(err);
     return err;
