@@ -13,4 +13,9 @@ router.post(
   routes_controller.createRoute
 );
 
+router.post(
+  "/updateRouteStops",
+  auth_middleware,
+  routes_controller.updateRouteStops
+);
 export default router;

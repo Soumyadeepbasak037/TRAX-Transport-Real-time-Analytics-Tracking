@@ -4,6 +4,7 @@ import {
   GetStopID,
   addNewRoute,
   constructLinestring,
+  modifyRouteStops,
 } from "../dbLogic/vehicle_route_management.js";
 
 //schema
@@ -139,4 +140,20 @@ export const getRouteLinestring = async (req, res) => {
       message: "Internal Server Error while generating linestring",
     });
   }
+};
+
+export const updateRouteStops = async (req, res) => {
+  const { route_id, stop_id, modification_type, stop_order } = req.body;
+  let resp = null;
+  if (stop_order != null) {
+    resp = await modifyRouteStops(
+      route_id,
+      stop_id,
+      modification_type,
+      stop_order
+    );
+  } else {
+    resp = await modifyRouteStops(route_id, stop_id, modification_type);
+  }
+  return res.json({ success: resp.success, message: resp.message });
 };
