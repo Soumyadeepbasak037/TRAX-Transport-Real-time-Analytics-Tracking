@@ -13,3 +13,4 @@ const roleMiddleware = (...allowedRoles) => {
 export default roleMiddleware;
 
 //higher order middleware, only way for making a configurable middleware
+//roles -> admin,driver,passenger

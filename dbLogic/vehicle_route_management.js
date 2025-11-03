@@ -1,5 +1,12 @@
 import db from "../config/db.js";
-
+//CRUD OPS
+export const getroutefromid = async (route_id) => {
+  const query = `select * from route_stops where route_id = $1 order by stop_order`;
+  const result = await db.query(query, [route_id]);
+  return result.rows;
+};
+//--------------------------------------------------------
+// console.log(await getroutefromid(1));
 export const insertStops = async (stops_arr) => {
   try {
     let inserted_stops_id_arr = [];
@@ -26,6 +33,39 @@ export const insertStops = async (stops_arr) => {
   }
 };
 
+export const modifyRouteStops = async (
+  route_id,
+  stop_id,
+  modification_type,
+  stop_order = -1
+) => {
+  if (modification_type == "add") {
+    const max_stop_order_query = `select count(stop_order)-1 as max_stop_order from route_stops group by route_id having route_id = $1`;
+    const max_stop_order_query_result = await db.query(max_stop_order_query, [
+      route_id,
+    ]);
+    const max_stop_order = max_stop_order_query_result.rows[0].max_stop_order;
+    if (stop_order === -1) {
+      try {
+        console.log(`Max stop order: ${max_stop_order}`);
+
+        const query = `INSERT INTO route_stops (route_id,stop_id,stop_order) VALUES ($1,$2,$3) RETURNING id`;
+        const result = await db.query(query, [
+          route_id,
+          stop_id,
+          max_stop_order + 1,
+        ]);
+        return { success: true, message: result.rows[0] };
+      } catch (err) {
+        return { success: false, message: err };
+      }
+    } else {
+      //max_stop_order
+      const update_query = `UPDATE route_stops SET `;
+    }
+  }
+};
+// console.log(await modifyRouteStops(5, 17, "add"));
 export const GetStopID = async (stopName_arr) => {
   try {
     const GetStopIdQuery = `SELECT stop_id FROM stops where stop_name = ANY($1)`;
@@ -179,6 +219,24 @@ export const addNewRoute = async (stopID_arr, vehicle_number, description) => {
     }
   } else {
     return "Route for given vehicle number already exists.";
+    // -- select * from route_stops where route_id = 4
+
+    // -- update route_stops set stop_order = stop_order + 1
+    // -- where route_id = 4 and stop_order <= 3 and stop_order >= 2
+
+    // with rev_route_stops as(
+    // with req_route_stops as (
+    // 	select * from route_stops
+    // 	where route_id = 4 and stop_order>=2
+    // )
+    // select * from req_route_stops order by id desc
+    // )
+
+    // -- select * from rev_route_stops
+
+    // update route_stops set stop_order = rev_route_stops.stop_order + 1
+    // FROM rev_route_stops
+    // where route_stops.id = rev_route_stops.id
   }
 };
 
@@ -203,13 +261,3 @@ export const constructLinestring = async (routeID) => {
   console.log(result.rows[0]);
   return result.rows[0];
 };
-
-// console.log(await GetStopID(["Howrah Station", "Esplanade"]));
-
-// await addNewRoute(
-//   await GetStopID(["Howrah Station", "Esplanade"]),
-//   "214A",
-//   "random ass bus"
-// );
-
-//addnewroute method and its upporting methods working
