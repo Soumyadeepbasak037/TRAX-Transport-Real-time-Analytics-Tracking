@@ -40,7 +40,7 @@ export const modifyRouteStops = async (
   stop_order = -1
 ) => {
   if (modification_type == "add") {
-    const max_stop_order_query = `select count(stop_order)-1 as max_stop_order from route_stops group by route_id having route_id = $1`;
+    const max_stop_order_query = `select coalesce(max(stop_order), -1) as max_stop_order from route_stops group by route_id having route_id = $1`;
     const max_stop_order_query_result = await db.query(max_stop_order_query, [
       route_id,
     ]);
@@ -55,13 +55,55 @@ export const modifyRouteStops = async (
           stop_id,
           max_stop_order + 1,
         ]);
-        return { success: true, message: result.rows[0] };
+        return { success: true, message: result };
       } catch (err) {
         return { success: false, message: err };
       }
     } else {
-      //max_stop_order
-      const update_query = `UPDATE route_stops SET `;
+      // -- select * from route_stops where route_id = 4
+      // -- update route_stops set stop_order = stop_order + 1
+      // -- where route_id = 4 and stop_order <= 3 and stop_order >= 2
+      // -- new stop at route_id = 4 and stop_order = 2
+      // with rev_route_stops as(
+      // with req_route_stops as (
+      // 	select * from route_stops
+      // 	where route_id = 4 and stop_order>=2
+      // )
+      // select * from req_route_stops order by id desc
+      // )
+      // -- select * from rev_route_stops
+      // update route_stops set stop_order = rev_route_stops.stop_order + 1
+      // FROM rev_route_stops
+      // where route_stops.id = rev_route_stops.id
+      try {
+        const shiftquery = `with rev_route_stops as(
+                    with req_route_stops as (
+                      select * from route_stops 
+                      where route_id = $1 and stop_order>=$2
+                    )
+                    select * from req_route_stops order by id desc
+                    )
+
+                    -- select * from rev_route_stops
+
+                    update route_stops set stop_order = rev_route_stops.stop_order + 1
+                    FROM rev_route_stops
+                    where route_stops.id = rev_route_stops.id 
+                    returning id`;
+        const shiftqueryresult = await db.query(shiftquery, [
+          route_id,
+          stop_order,
+        ]);
+        const insertQuery = `INSERT INTO route_stops (route_id,stop_id,stop_order) VALUES ($1,$2,$3)`;
+        const insertresult = await db.query(insertQuery, [
+          route_id,
+          stop_id,
+          stop_order,
+        ]);
+        return { success: true, message: insertresult };
+      } catch (err) {
+        return { success: false, message: err };
+      }
     }
   }
 };
