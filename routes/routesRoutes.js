@@ -4,6 +4,8 @@ import auth_middleware from "../middlewares/authMiddleware.js";
 import roleMiddleware from "../middlewares/roleValidationMiddleware.js";
 const router = express.Router();
 
+console.log("Routes Controller:", routes_controller);
+console.log("dasdssad:", roleMiddleware);
 // add role validation from roleValidationmiddleware only drivers can add routes
 router.post(
   "/insertStops",
@@ -30,6 +32,6 @@ router.get(
   "/allRoutes",
   auth_middleware,
   roleMiddleware("admin"),
-  routes_controller.getAllRoutes
+  routes_controller.getRoutes
 );
 export default router;
