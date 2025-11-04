@@ -48,7 +48,7 @@ export const register = async (req, res) => {
 
     const user_id = result.rows[0].user_id;
     if (role == "passenger") {
-      return res.status(201).json({ message: "User registered", user_id });
+      return res.status(201).json({ message: "Passenger registered", user_id });
     } else if (role == "driver") {
       const inserted_vehicle_id = await helper.insertNewVehicle(
         vehicle_number,
@@ -66,6 +66,11 @@ export const register = async (req, res) => {
       );
       return res.json({
         message: `Inserted driver id: ${inserted_driver_id}, assigned vhicle id: ${inserted_vehicle_id}`,
+      });
+    } else if (role == "admin") {
+      console.log("Admin account detected");
+      return res.json({
+        message: `Inserted Admin id: ${user_id}`,
       });
     }
   } catch (err) {
@@ -133,7 +138,7 @@ export const login = async (req, res) => {
         SECRET_KEY,
         { expiresIn: "1h" }
       );
-    } else {
+    } else if (user.role == "passenger") {
       token = jwt.sign(
         {
           id: user.user_id,
@@ -144,6 +149,18 @@ export const login = async (req, res) => {
         SECRET_KEY,
         { expiresIn: "1h" }
       );
+    } else if (user.role == "admin") {
+      token = jwt.sign(
+        {
+          id: user.user_id,
+          username: user.username,
+          role: user.role,
+          vehicleId: null,
+        },
+        SECRET_KEY,
+        { expiresIn: "1h" }
+      );
+      console.log(user.role);
     }
 
     res.json({ token });
