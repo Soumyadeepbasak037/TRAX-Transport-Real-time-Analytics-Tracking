@@ -1,5 +1,17 @@
 import db from "../config/db.js";
 //CRUD OPS
+
+export const getAllRoutes = async () => {
+  const query = `
+          select rs.route_id,s.stop_name,rs.stop_order from route_stops rs inner join routes r on r.route_id = rs.route_id   
+inner join stops s on rs.stop_id = s.stop_id order by route_id,stop_order asc`;
+
+  const result = await db.query(query);
+  // console.log(result.rows);
+  return result.rows;
+};
+// getAllRoutes();
+
 export const getroutefromid = async (route_id) => {
   const query = `select * from route_stops where route_id = $1 order by stop_order`;
   const result = await db.query(query, [route_id]);

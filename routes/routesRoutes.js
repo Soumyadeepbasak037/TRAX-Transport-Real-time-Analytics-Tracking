@@ -25,4 +25,11 @@ router.post(
   roleMiddleware("admin"),
   routes_controller.updateRouteStops
 );
+
+router.get(
+  "/allRoutes",
+  auth_middleware,
+  roleMiddleware("admin"),
+  routes_controller.getAllRoutes
+);
 export default router;
