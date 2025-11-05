@@ -6,8 +6,8 @@ export default function App() {
   const [status, setStatus] = useState("Connecting...");
   const [position, setPosition] = useState(null);
 
-  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwidXNlcm5hbWUiOiJzYjEiLCJyb2xlIjoiZHJpdmVyIiwidmVoaWNsZUlkIjoyLCJpYXQiOjE3NjIwOTExMTYsImV4cCI6MTc2MjA5NDcxNn0.M_qCmZAvDQqD8ux5yWopO5xrqi1xLz1mxHEVz00ja4I"
-  const BACKEND_URL = "https://trax-transport-real-time-analytics.onrender.com";
+  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwidXNlcm5hbWUiOiJzYjEiLCJyb2xlIjoiZHJpdmVyIiwidmVoaWNsZUlkIjoyLCJpYXQiOjE3NjIzMjMwMjUsImV4cCI6MTc2MjMyNjYyNX0.NoNn6fKr8Ljt6BajKgiSlBHhK1rXo9m2Hb3LbuSLM7Y"
+  const BACKEND_URL = "http://localhost:3000";
 
   useEffect(() => {
     const socket = io(BACKEND_URL, {

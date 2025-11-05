@@ -18,7 +18,7 @@ const app = express();
 const server = http.createServer(app);
 app.use(
   cors({
-    origin: "http://localhost:5173", // your React dev server
+    origin: "http://localhost:5173",
     credentials: true,
   })
 );
@@ -27,7 +27,7 @@ const io = new Server(server, {
   cors: { origin: "*" },
 });
 
-app.use(express.static("public")); // put your HTML files in ./public
+app.use(express.static("public"));
 app.use(express.json());
 
 // // Middleware to modify the request object and attach the io property to it,
@@ -70,9 +70,12 @@ io.on("connection", (socket) => {
   if (socket.role === "driver") {
     driverSocketHandler(io, socket); // handles trip start & location updates
   }
-
   if (socket.role === "passenger") {
     passengerSocketHandler(io, socket); // handles joining vehicle rooms
+  }
+  if (socket.role === "admin") {
+    // admin also joins the vehicle room, doesnt transmit anything
+    passengerSocketHandler(io, socket);
   }
 });
 

@@ -3,12 +3,22 @@ import { useEffect, useState } from "react";
 import API from "../api.js";
 import RouteList from "../components/RouteList.jsx";
 import ActiveTripsCard from "../components/ActiveTripsCard.jsx";
+import io from "socket.io-client";
+
+
+const socket = io("http://localhost:3000", {
+      auth: { token: localStorage.getItem('token') },
+    });
+
+
 
 export default function AdminDashboard() {
   const [groupedRoutes, setGroupedRoutes] = useState({});
   const [trips, setTrips] = useState([]);
+  const [locationData, setLocationData] = useState(null);
 
   useEffect(() => {
+    console.log(localStorage.getItem('token'))
     const fetchRoutes = async () => {
       try {
         const res = await API.get("/routeManagement/allRoutes");
@@ -30,6 +40,7 @@ export default function AdminDashboard() {
         const res = await API.get("/routeManagement/activeTrips");
         if (res.data.success) {
           setTrips(res.data.message);
+          console.log(res.data)
         }
       } catch (err) {
         console.log("Error fetching active trips:", err);
@@ -39,6 +50,19 @@ export default function AdminDashboard() {
     fetchRoutes();
     fetchActiveTrips();
   }, []);
+
+  const handleTrack = (vehicleId) => {
+    console.log("Joining vehicle room:", vehicleId);
+    socket.emit("passenger:join", { vehicleId });
+
+    // Prevent duplicate listeners
+    socket.off("vehicleLocationUpdate");
+
+    socket.on("vehicleLocationUpdate", (data) => {
+      console.log("📍 Vehicle Location Update:", data);
+      setLocationData(data);
+    });
+  };
 
     return (
     <div className="p-6 min-h-screen bg-gray-100">
@@ -94,6 +118,14 @@ export default function AdminDashboard() {
               >
                 {trip.status}
               </td>
+              <td className="px-4 py-2 text-right">
+        <button
+          onClick={() => handleTrack(trip.vehicle_id)}
+          className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md text-sm"
+        >
+          Check Location
+        </button>
+      </td>
             </tr>
           ))}
         </tbody>
@@ -103,6 +135,18 @@ export default function AdminDashboard() {
     <p className="text-gray-600 text-center">No active trips currently.</p>
   )}
 </section>
+    {/* 📍 Location Display Section */}
+      {locationData && (
+        <div className="mt-6 bg-white shadow-sm rounded-xl p-4 border border-gray-200 max-w-3xl mx-auto">
+          <h3 className="text-lg font-semibold text-gray-800 mb-2">Current Vehicle Location</h3>
+          <p className="text-gray-700 text-sm">Vehicle ID: {locationData.vehicleId}</p>
+          <p className="text-gray-700 text-sm">Trip ID: {locationData.tripId}</p>
+          <p className="text-gray-700 text-sm">Latitude: {locationData.lat}</p>
+          <p className="text-gray-700 text-sm">Longitude: {locationData.lng}</p>
+          <p className="text-gray-700 text-sm">Speed: {locationData.speed} m/s</p>
+          <p className="text-gray-700 text-sm">Accuracy: ±{locationData.accuracy} m</p>
+        </div>
+      )}
 </div>
   );
 }
