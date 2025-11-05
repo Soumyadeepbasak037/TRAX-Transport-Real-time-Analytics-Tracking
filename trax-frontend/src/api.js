@@ -2,7 +2,9 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:3000/api", // your backend base URL
+  // baseURL: "http://localhost:3000/api", local
+  //render ->
+  baseURL: "https://trax-transport-real-time-analytics.onrender.com/api",
 });
 
 // Add token to every request if available

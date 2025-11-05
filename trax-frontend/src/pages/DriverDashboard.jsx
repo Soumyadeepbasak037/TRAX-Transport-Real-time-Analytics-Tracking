@@ -45,7 +45,12 @@ export default function DriverDashboard(){
     const[status,setStatus] = useState("Connecting...")
     const [position, setPosition] = useState(null);
     const sendLocation = ()=>{
-        const socket = io("http://localhost:3000", {
+      //local
+        // const socket = io("http://localhost:3000", {
+        //     auth: { token: localStorage.getItem('token') },
+        // });
+      //cloud
+        const socket = io("https://trax-transport-real-time-analytics.onrender.com", {
             auth: { token: localStorage.getItem('token') },
         });
 

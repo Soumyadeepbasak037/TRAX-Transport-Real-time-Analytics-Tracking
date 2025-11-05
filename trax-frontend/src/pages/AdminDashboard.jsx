@@ -10,9 +10,15 @@ export default function AdminDashboard() {
   const [groupedRoutes, setGroupedRoutes] = useState({});
   const [trips, setTrips] = useState([]);
   const [locationData, setLocationData] = useState(null);
-  const socket = io("http://localhost:3000", {
-        auth: { token: localStorage.getItem('token') },
-      });
+  //local
+  // const socket = io("http://localhost:3000", {
+  //       auth: { token: localStorage.getItem('token') },
+  //     });
+
+  //remote
+     const socket = io("https://trax-transport-real-time-analytics.onrender.com", {
+            auth: { token: localStorage.getItem('token') },
+        });
 
   useEffect(() => {
     console.log(localStorage.getItem('token'))
