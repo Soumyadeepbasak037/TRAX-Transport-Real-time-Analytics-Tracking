@@ -13,4 +13,4 @@ export const getDriverDetails = async (driverID) => {
   console.log(result.rows);
   return result.rows;
 };
-await getDriverDetails(1);
+// await getDriverDetails(1);

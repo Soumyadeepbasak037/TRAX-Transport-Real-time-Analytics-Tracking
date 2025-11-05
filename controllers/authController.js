@@ -108,7 +108,7 @@ export const login = async (req, res) => {
 
     const user = result.rows[0];
     const passwordMatch = bcrypt.compareSync(password, user.password_hash);
-
+    // console.log(user);
     if (!passwordMatch) {
       return res.status(401).json({ message: "Invalid password" });
     }
@@ -126,11 +126,12 @@ export const login = async (req, res) => {
                       `;
       const result = await db.query(joinQuery, [user.user_id]);
       const driver_data = result.rows[0];
-      console.log(result);
+      console.log(result.rows);
 
       token = jwt.sign(
         {
           id: user.user_id,
+          driver_id: driver_data.driver_id,
           username: user.username,
           role: user.role,
           vehicleId: driver_data.vehicle_id,

@@ -6,16 +6,13 @@ import ActiveTripsCard from "../components/ActiveTripsCard.jsx";
 import io from "socket.io-client";
 
 
-const socket = io("http://localhost:3000", {
-      auth: { token: localStorage.getItem('token') },
-    });
-
-
-
 export default function AdminDashboard() {
   const [groupedRoutes, setGroupedRoutes] = useState({});
   const [trips, setTrips] = useState([]);
   const [locationData, setLocationData] = useState(null);
+  const socket = io("http://localhost:3000", {
+        auth: { token: localStorage.getItem('token') },
+      });
 
   useEffect(() => {
     console.log(localStorage.getItem('token'))

@@ -9,7 +9,8 @@ export const GetActiveTrips = async (req, res) => {
 };
 export const GetDriverDetails = async (req, res) => {
   try {
-    const result = await getDriverDetails();
+    const { id } = req.body;
+    const result = await getDriverDetails(id);
     res.json({ success: true, message: result });
   } catch (err) {
     res.json({ success: false, message: err });

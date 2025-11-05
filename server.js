@@ -5,11 +5,11 @@ import { Server } from "socket.io";
 import jwt from "jsonwebtoken";
 import routeManager from "./routes/routesRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import essentialRoutes from "./routes/frontendPreRequisiteRoutes.js";
 import driverSocketHandler from "./sockets/driverSocket.js";
 import passengerSocketHandler from "./sockets/passengerSocket.js";
 import suggestionManager from "./routes/suggestionroutes.js";
 import dotenv from "dotenv";
-
 dotenv.config();
 // console.log(process.env);
 const SECRET_KEY = "hehe";
@@ -90,6 +90,7 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/routeManagement", routeManager);
 app.use("/api/suggestion", suggestionManager);
+app.use("/api/essentials", essentialRoutes);
 server.listen(process.env.PORT, () => {
   console.log(`Server listening on port ${process.env.PORT}`);
 });
