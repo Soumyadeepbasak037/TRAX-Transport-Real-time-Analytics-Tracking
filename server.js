@@ -16,6 +16,13 @@ const SECRET_KEY = "hehe";
 
 const app = express();
 const server = http.createServer(app);
+app.use(
+  cors({
+    origin: "http://localhost:5173", // your React dev server
+    credentials: true,
+  })
+);
+
 const io = new Server(server, {
   cors: { origin: "*" },
 });
