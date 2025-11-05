@@ -45,6 +45,9 @@ app.use(express.json());
 // import passengerHandler from "./sockets/passengerSocket";
 
 //io middleware
+
+//add the token generated after login to the socket to identify the role and redirect the socket to use the correct handler ie. if the token.role is passenger use the passengerhandler which only handles the joining of sockets and reveibing data and if the role is driver then use driver handler to open new socket rooms with vehicle-id uid and transmit locationupdate events along with necessary database logging ops
+//this is the only function of the this io.use shit -> it helps identify the kind of sockethandler
 io.use((socket, next) => {
   try {
     const token = socket.handshake.auth.token;

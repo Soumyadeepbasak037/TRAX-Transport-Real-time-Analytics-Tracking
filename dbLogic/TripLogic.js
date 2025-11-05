@@ -6,4 +6,11 @@ export const getActiveTrips = async () => {
   console.log(result.rows);
   return result.rows;
 };
-await getActiveTrips();
+
+export const getDriverDetails = async (driverID) => {
+  const query = `SELECT * FROM drivers WHERE driver_id = $1`;
+  const result = await db.query(query, [driverID]);
+  console.log(result.rows);
+  return result.rows;
+};
+await getDriverDetails(1);

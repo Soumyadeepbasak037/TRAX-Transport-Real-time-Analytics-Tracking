@@ -55,11 +55,11 @@ export default function AdminDashboard() {
     console.log("Joining vehicle room:", vehicleId);
     socket.emit("passenger:join", { vehicleId });
 
-    // Prevent duplicate listeners
+    // Prevent duplicate listeners prevents event handler from fdiring
     socket.off("vehicleLocationUpdate");
 
     socket.on("vehicleLocationUpdate", (data) => {
-      console.log("📍 Vehicle Location Update:", data);
+      console.log("Vehicle Location Update:", data);
       setLocationData(data);
     });
   };
@@ -111,21 +111,32 @@ export default function AdminDashboard() {
                 className={`px-4 py-2 text-sm font-medium ${
                   trip.status === "ongoing"
                     ? "text-green-600"
-                    : trip.status === "pending"
+                    : trip.status === "completed"
                     ? "text-yellow-600"
                     : "text-red-600"
                 }`}
               >
                 {trip.status}
+
               </td>
+              
               <td className="px-4 py-2 text-right">
-        <button
-          onClick={() => handleTrack(trip.vehicle_id)}
-          className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md text-sm"
-        >
-          Check Location
-        </button>
+          
+              {trip.status === "ongoing" &&( 
+                <button
+                  onClick={() => handleTrack(trip.vehicle_id)}
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md text-sm"
+                >
+                  Check Location
+                </button>
+              )
+                }
       </td>
+      {/* <td className="px-4 py-2 text-right">
+        {trip.status === "completed"&&(
+          <td className="px-4 py-2 text-sm text-gray-700">Completed</td>
+        )}
+      </td> */}
             </tr>
           ))}
         </tbody>
@@ -135,7 +146,7 @@ export default function AdminDashboard() {
     <p className="text-gray-600 text-center">No active trips currently.</p>
   )}
 </section>
-    {/* 📍 Location Display Section */}
+    {/*Location Display Section */}
       {locationData && (
         <div className="mt-6 bg-white shadow-sm rounded-xl p-4 border border-gray-200 max-w-3xl mx-auto">
           <h3 className="text-lg font-semibold text-gray-800 mb-2">Current Vehicle Location</h3>
