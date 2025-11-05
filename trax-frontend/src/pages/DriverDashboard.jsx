@@ -39,8 +39,62 @@ export default function DriverDashboard(){
             }
         }
         fetchDriverDetails();
+        sendLocation()
     },[])
 
+    const[status,setStatus] = useState("Connecting...")
+    const [position, setPosition] = useState(null);
+    const sendLocation = ()=>{
+        const socket = io("http://localhost:3000", {
+            auth: { token: localStorage.getItem('token') },
+        });
+
+        socket.on("connect", () => {
+            console.log("Connected to backend");
+            setStatus("Connected");
+         });
+
+        socket.on("disconnect", () => {
+            console.log("Disconnected");
+            setStatus("Disconnected");
+        });
+
+        let latestLocation = null;
+
+        if ("geolocation" in navigator) {
+      const watchId = navigator.geolocation.watchPosition(
+        (pos) => {
+          latestLocation = {
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude,
+            speed: pos.coords.speed || 0,
+            accuracy: pos.coords.accuracy || 0,
+            timestamp: Date.now(),
+          };
+          setPosition(latestLocation);
+        },
+        (err) => console.error("Geolocation error:", err),
+        { enableHighAccuracy: true }
+      );
+
+      const interval = setInterval(() => {
+        if (latestLocation) {
+          socket.emit("driverLocation", latestLocation);
+          console.log("📡 Sent location:", latestLocation.lat, latestLocation.lng);
+        }
+      }, 1500);
+
+        // Cleanup
+        return () => {
+            clearInterval(interval);
+            navigator.geolocation.clearWatch(watchId);
+            socket.disconnect();
+        };
+        } else {
+        console.error("Geolocation not supported.");
+        }
+
+    }
   
   if (!driverDetails.full_name) {
     return (
@@ -61,6 +115,18 @@ export default function DriverDashboard(){
           Joined on: {new Date(driverDetails.created_at).toLocaleDateString()}
         </p>
       </div>
+
+        {position ? (
+        <div>
+          <p>Lat: {position.lat.toFixed(6)}</p>
+          <p>Lng: {position.lng.toFixed(6)}</p>
+          <p>Speed: {position.speed?.toFixed(2)} m/s</p>
+          <p>Accuracy: ±{position.accuracy} m</p>
+        </div>
+      ) : (
+        <p>Waiting for GPS...</p>
+      )}
+
     </div>
   );
 }

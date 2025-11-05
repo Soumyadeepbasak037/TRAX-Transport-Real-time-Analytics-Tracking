@@ -6,7 +6,7 @@ export default function App() {
   const [status, setStatus] = useState("Connecting...");
   const [position, setPosition] = useState(null);
 
-  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwidXNlcm5hbWUiOiJzYjEiLCJyb2xlIjoiZHJpdmVyIiwidmVoaWNsZUlkIjoyLCJpYXQiOjE3NjIzMjMwMjUsImV4cCI6MTc2MjMyNjYyNX0.NoNn6fKr8Ljt6BajKgiSlBHhK1rXo9m2Hb3LbuSLM7Y"
+  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZHJpdmVyX2lkIjoxLCJ1c2VybmFtZSI6InNiMSIsInJvbGUiOiJkcml2ZXIiLCJ2ZWhpY2xlSWQiOjIsImlhdCI6MTc2MjM0OTg4MCwiZXhwIjoxNzYyMzUzNDgwfQ.9Agead_LAhuKs22xV_23P2Y93FUzeIc9mCBKW3XXuXQ"
   const BACKEND_URL = "http://localhost:3000";
 
   useEffect(() => {
