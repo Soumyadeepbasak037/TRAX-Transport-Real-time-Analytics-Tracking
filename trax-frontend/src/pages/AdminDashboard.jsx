@@ -16,9 +16,9 @@ export default function AdminDashboard() {
   //     });
 
   //remote
-     const socket = io("https://trax-transport-real-time-analytics.onrender.com", {
-            auth: { token: localStorage.getItem('token') },
-        });
+    //  const socket = io("https://trax-transport-real-time-analytics.onrender.com", {
+    //         auth: { token: localStorage.getItem('token') },
+    //     });
 
   useEffect(() => {
     console.log(localStorage.getItem('token'))
@@ -55,6 +55,16 @@ export default function AdminDashboard() {
   }, []);
 
   const handleTrack = (vehicleId) => {
+     //local
+    const socket = io("http://localhost:3000", {
+          auth: { token: localStorage.getItem('token') },
+        });
+
+  //remote
+    //  const socket = io("https://trax-transport-real-time-analytics.onrender.com", {
+    //         auth: { token: localStorage.getItem('token') },
+    //     });
+
     console.log("Joining vehicle room:", vehicleId);
     socket.emit("passenger:join", { vehicleId });
 
