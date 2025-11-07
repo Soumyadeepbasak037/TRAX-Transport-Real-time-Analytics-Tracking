@@ -167,3 +167,12 @@ export const getRoutes = async (req, res) => {
     res.json({ success: false, message: err });
   }
 };
+
+export const getallStops = async (req, res) => {
+  try {
+    const data = await getAllRoutes();
+    return res.json({ success: true, message: data });
+  } catch (err) {
+    return res.json({ success: false, message: err });
+  }
+};

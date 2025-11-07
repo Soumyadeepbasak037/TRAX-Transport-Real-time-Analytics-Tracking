@@ -294,6 +294,15 @@ export const addNewRoute = async (stopID_arr, vehicle_number, description) => {
   }
 };
 
+export const getAllStops = async () => {
+  try {
+    const query = `select * from stops`;
+    const result = await db.query(query);
+    return result.rows;
+  } catch (err) {
+    return err;
+  }
+};
 export const constructLinestring = async (routeID) => {
   const query = `
     SELECT r.route_id,

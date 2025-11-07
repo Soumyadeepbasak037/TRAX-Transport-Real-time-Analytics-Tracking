@@ -12,6 +12,8 @@ export const getRouteIdByVehicleNumber = async (vehicleNumber) => {
   return result.rows[0]?.route_id || null;
 };
 
+// console.log(await getRouteIdByVehicleNumber("78/1"));
+
 export const startTrip = async (routeId, vehicleId) => {
   const query = `
     INSERT INTO trips (route_id, vehicle_id, start_time, status)
