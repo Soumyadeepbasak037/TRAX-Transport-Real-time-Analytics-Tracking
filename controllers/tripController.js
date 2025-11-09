@@ -1,12 +1,19 @@
 import { getActiveTrips, getDriverDetails } from "../dbLogic/TripLogic.js";
 export const GetActiveTrips = async (req, res) => {
   try {
-    const result = await getActiveTrips();
+    const { routeIds } = req.body;
+
+    if (routeIds) {
+      result = await getActiveTrips(routeIds);
+    } else {
+      result = await getActiveTrips();
+    }
     res.json({ success: true, message: result });
   } catch (err) {
     res.json({ success: false, message: err });
   }
 };
+
 export const GetDriverDetails = async (req, res) => {
   try {
     const { id } = req.body;
