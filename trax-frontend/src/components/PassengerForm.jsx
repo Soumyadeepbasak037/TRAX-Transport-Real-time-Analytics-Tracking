@@ -1,52 +1,89 @@
 import { useEffect, useState } from "react";
 import API from "../api.js";
 
-export default function PassengerFormComponent({sendData}){
-    // const [srcStop, setsrcStop] = useState(null)
-    // const [destStop,setdestStop] = useState(null)
+export default function PassengerFormComponent({ sendData }) {
+  const [stops, setStops] = useState([]); // store fetched stops
+  const [loading, setLoading] = useState(true);
 
-    const handleSubmit = async(e) =>{
-        e.preventDefault()
+  
+  useEffect(() => {
+    const fetchStops = async () => {
+      try {
+        const res = await API.get("/routeManagement/allStops");
 
-        const formData = new FormData(e.target);
-        const srcStop = formData.get("srcStop")
-        const destStop = formData.get("destStop")
+        if (res.data.success && Array.isArray(res.data.message)) {
+          setStops(res.data.message); // store stops in state
+        }
+      } catch (err) {
+        console.error("Error fetching stops:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-        if (srcStop === destStop) {
-            alert("Source and destination cannot be the same!");
+    fetchStops();
+  }, []);
+
+  // Form submit handler
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+
+    const formData = new FormData(e.target);
+    const srcStop = formData.get("srcStop");
+    const destStop = formData.get("destStop");
+
+    if (srcStop === destStop) {
+      alert("Source and destination cannot be the same!");
       return;
     }
-        sendData({ srcStop, destStop });
-    }
 
+    // send stop IDs to parent
+    sendData({ srcStop, destStop });
+  };
 
+  // Render
+  if (loading) return <p>Loading stops...</p>;
 
-
-
-     return (
-    <form onSubmit={handleSubmit} className="p-4 bg-white shadow-md rounded-xl">
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className="p-4 bg-white shadow-md rounded-xl max-w-md mx-auto"
+    >
       <h2 className="text-lg font-semibold mb-3">Passenger Trip Form</h2>
 
+      {/* Source stop dropdown */}
       <div className="mb-3">
         <label>Source Stop:</label>
-        <input
-          type="text"
+        <select
           name="srcStop"
-          placeholder="Enter source stop"
           required
           className="border px-2 py-1 w-full rounded"
-        />
+        >
+          <option value="">Select Source Stop</option>
+          {stops.map((stop) => (
+            <option key={stop.stop_id} value={stop.stop_id}>
+              {stop.stop_name}
+            </option>
+          ))}
+        </select>
       </div>
 
+      {/* Destination stop dropdown */}
       <div className="mb-3">
         <label>Destination Stop:</label>
-        <input
-          type="text"
+        <select
           name="destStop"
-          placeholder="Enter destination stop"
           required
           className="border px-2 py-1 w-full rounded"
-        />
+        >
+          <option value="">Select Destination Stop</option>
+          {stops.map((stop) => (
+            <option key={stop.stop_id} value={stop.stop_id}>
+              {stop.stop_name}
+            </option>
+          ))}
+        </select>
       </div>
 
       <button
@@ -58,5 +95,3 @@ export default function PassengerFormComponent({sendData}){
     </form>
   );
 }
-
-

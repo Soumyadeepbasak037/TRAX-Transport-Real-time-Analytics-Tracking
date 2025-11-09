@@ -4,30 +4,32 @@ import API from "../api.js";
 // import RouteList from "../components/RouteList.jsx";
 // import ActiveTripsCard from "../components/ActiveTripsCard.jsx";
 import io from "socket.io-client";
+import PassengerFormComponent from "../components/PassengerForm.jsx";
 
 
 
-export default function PassengerDashboard() {
-    // const [locationData, setLocationData] = useState(null);
+export default function PassengerPage() {
+  const [suggestedRoutes,setSuggestedRoutes] = useState([])
+  const [suggestedVehicles,setSuggestedVehicles] = useState(null)
 
-      const handlePassengerSubmit = async ({ srcStop, destStop }) => {
-    console.log("Form data:", srcStop, destStop);
+  const handleSendData = async({ srcStop, destStop }) => {
+    console.log("Selected stops:", srcStop, destStop);
 
-    // Example: send to backend
-    const res = await fetch("http://localhost:3000/api/suggestion/singleHopSuggestion", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ srcStop, destStop }),
-    });
+    const res = await API.post("/suggestion/singleHopSuggestion",{
+      src_id: srcStop,
+      dest_id: destStop,
+    })
+    console.log(res.data.message)
+    console.log(res.data.message.map((route_object) => route_object.route_id));
+    setSuggestedRoutes(res.data.message.map((route_object) => route_object.route_id))
+    console.log(suggestedRoutes)
+    
 
-    const data = await res.json();
-    console.log("Server response:", data);
   };
 
   return (
     <div className="p-6">
-      <PassengerForm onSubmit={handlePassengerSubmit} />
+      <PassengerFormComponent sendData={handleSendData} />
     </div>
   );
-
 }

@@ -14,7 +14,7 @@ export default function RegisterForm() {
     const data = Object.fromEntries(new FormData(form).entries());
     data.role = role; // explicitly add role
 
-    let apiUrl = "http://localhost:3000/api/auth/register"; // single endpoint since backend handles role
+    let apiUrl = "http://localhost:3000/api/auth/register";
 
     try {
       const res = await axios.post(apiUrl, data, {

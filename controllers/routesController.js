@@ -6,6 +6,7 @@ import {
   constructLinestring,
   modifyRouteStops,
   getAllRoutes,
+  getAllStops,
 } from "../dbLogic/vehicle_route_management.js";
 
 //schema
@@ -170,7 +171,7 @@ export const getRoutes = async (req, res) => {
 
 export const getallStops = async (req, res) => {
   try {
-    const data = await getAllRoutes();
+    const data = await getAllStops();
     return res.json({ success: true, message: data });
   } catch (err) {
     return res.json({ success: false, message: err });

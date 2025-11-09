@@ -34,4 +34,7 @@ router.get(
 );
 
 router.get("/allRoutes", auth_middleware, routes_controller.getRoutes);
+
+router.get("/allStops", auth_middleware, routes_controller.getallStops);
+
 export default router;

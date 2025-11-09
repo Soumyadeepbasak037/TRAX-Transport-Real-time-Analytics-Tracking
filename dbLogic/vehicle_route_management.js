@@ -1,4 +1,5 @@
 import db from "../config/db.js";
+// import { getallStops } from "../controllers/routesController.js";
 //CRUD OPS
 
 export const getAllRoutes = async () => {
@@ -11,6 +12,18 @@ inner join stops s on rs.stop_id = s.stop_id order by route_id,stop_order asc`;
   return result.rows;
 };
 // getAllRoutes();
+
+export const getAllStops = async () => {
+  try {
+    const query = `select * from stops`;
+    const result = await db.query(query);
+    return result.rows;
+  } catch (err) {
+    return err;
+  }
+};
+
+// console.log(await getAllStops());
 
 export const getroutefromid = async (route_id) => {
   const query = `select * from route_stops where route_id = $1 order by stop_order`;
@@ -294,15 +307,6 @@ export const addNewRoute = async (stopID_arr, vehicle_number, description) => {
   }
 };
 
-export const getAllStops = async () => {
-  try {
-    const query = `select * from stops`;
-    const result = await db.query(query);
-    return result.rows;
-  } catch (err) {
-    return err;
-  }
-};
 export const constructLinestring = async (routeID) => {
   const query = `
     SELECT r.route_id,
