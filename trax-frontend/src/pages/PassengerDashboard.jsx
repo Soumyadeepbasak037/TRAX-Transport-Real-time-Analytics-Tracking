@@ -15,15 +15,21 @@ export default function PassengerPage() {
   const handleSendData = async({ srcStop, destStop }) => {
     console.log("Selected stops:", srcStop, destStop);
 
-    const res = await API.post("/suggestion/singleHopSuggestion",{
+    const routesSuggestion = await API.post("/suggestion/singleHopSuggestion",{
       src_id: srcStop,
       dest_id: destStop,
     })
-    console.log(res.data.message)
-    console.log(res.data.message.map((route_object) => route_object.route_id));
-    setSuggestedRoutes(res.data.message.map((route_object) => route_object.route_id))
-    console.log(suggestedRoutes)
-    
+    console.log(routesSuggestion.data.message)
+    // console.log(routesSuggestion.data.message.map((route_object) => route_object.route_id));
+    setSuggestedRoutes(routesSuggestion.data.message.map((route_object) => route_object.route_id))
+    console.log(suggestedRoutes)    
+    // /api/routeManagement/activeTrips
+
+    const vehicleSuggestion = await API.get("/routeManagement/activeTrips",{
+      routeIds : suggestedRoutes
+    })
+
+    console.log(vehicleSuggestion.data)
 
   };
 

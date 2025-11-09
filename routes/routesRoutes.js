@@ -29,7 +29,7 @@ router.post(
 router.get(
   "/activeTrips",
   auth_middleware,
-  roleMiddleware("admin"),
+  // roleMiddleware("admin", "driver", "passenger"),
   tripController.GetActiveTrips
 );
 

@@ -20,6 +20,7 @@ export const getActiveTrips = async (routeIDs) => {
         `;
 
     const result = await db.query(query, [routeIDs]);
+    // console.log(result.rows);
     return result.rows;
   }
 };
