@@ -16,10 +16,12 @@ export const getActiveTrips = async (routeIDs) => {
           INNER JOIN vehicles v ON tr.vehicle_id = v.vehicle_id
           INNER JOIN drivers d ON v.vehicle_id = d.assigned_vehicle_id
           WHERE tr.route_id = ANY($1)
+          AND tr.status = 'ongoing'
           ORDER BY tr.trip_id DESC;
         `;
 
     const result = await db.query(query, [routeIDs]);
+    console.log(result.rows);
     // console.log(result.rows);
     return result.rows;
   }

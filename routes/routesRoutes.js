@@ -26,7 +26,7 @@ router.post(
   routes_controller.updateRouteStops
 );
 
-router.get(
+router.post(
   "/activeTrips",
   auth_middleware,
   // roleMiddleware("admin", "driver", "passenger"),

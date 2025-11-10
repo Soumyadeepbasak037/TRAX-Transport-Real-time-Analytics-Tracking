@@ -40,7 +40,7 @@ export default function AdminDashboard() {
 
     const fetchActiveTrips = async () => {
       try {
-        const res = await API.get("/routeManagement/activeTrips");
+        const res = await API.post("/routeManagement/activeTrips");
         if (res.data.success) {
           setTrips(res.data.message);
           console.log(res.data)
