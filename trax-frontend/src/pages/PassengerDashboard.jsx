@@ -11,7 +11,8 @@ import PassengerFormComponent from "../components/PassengerForm.jsx";
 export default function PassengerPage() {
   const [suggestedRoutes,setSuggestedRoutes] = useState([])
   const [suggestedVehicles,setSuggestedVehicles] = useState([])
-
+  const [locationData,setLocationData] = useState(null)
+  
   const handleSendData = async({ srcStop, destStop }) => {
     console.log("Selected stops:", srcStop, destStop);
 
@@ -38,8 +39,20 @@ export default function PassengerPage() {
     setSuggestedVehicles(vehicleSuggestion.data.message || []);
   };
 
-  const handleSocket = async() =>{
+  const handleSocket = async(vehicleID) =>{
     
+     const socket = io("http://localhost:3000", {
+          auth: { token: localStorage.getItem('token') },
+        });
+
+    console.log("Joining vehicle room:", vehicleID);
+    socket.emit("passenger:join", { vehicleID });
+    socket.off("vehicleLocationUpdate");
+
+    socket.on("vehicleLocationUpdate", (data) => {
+    console.log("Vehicle Location Update:", data);
+    setLocationData(data);
+    });
   }
 
 
@@ -50,7 +63,7 @@ export default function PassengerPage() {
       <div className="p-6 space-y-6">
         <PassengerFormComponent sendData={handleSendData} />
 
-        {/* ✅ Show suggested vehicles */}
+        {/* Show suggested vehicles */}
         {suggestedVehicles.length > 0 && (
           <div className="bg-white shadow-md rounded-xl p-4">
             <h2 className="text-lg font-semibold mb-3">
@@ -86,7 +99,7 @@ export default function PassengerPage() {
           </div>
         )}
 
-        {/* 🚫 If no data yet */}
+        {/*If no data yet */}
         {suggestedVehicles.length === 0 && (
           <p className="text-gray-500 text-center mt-4">
             No vehicle suggestions yet. Select stops to get routes.
