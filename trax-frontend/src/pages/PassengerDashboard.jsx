@@ -25,18 +25,26 @@ export default function PassengerPage() {
     
     const routeids = (routesSuggestion.data.message.map((route_object) => route_object.route_id))
 
-    setSuggestedRoutes(routeids)
+    setSuggestedRoutes(routeids) 
 
     console.log(`suggestedRouteId:${suggestedRoutes}`)
         
     // /api/routeManagement/activeTrips
 
-    const vehicleSuggestion = await API.post("/routeManagement/activeTrips",{
-      routeIds : routeids
-    })
+    if(routeids.length>0){
+      const vehicleSuggestion = await API.post("/routeManagement/activeTrips",{
+        routeIds : routeids
+      })
+      console.log("Suggested Vehicle Data:", vehicleSuggestion.data);
+      console.log("Suggested Vehicle Data:", vehicleSuggestion.data);
+      setSuggestedVehicles(vehicleSuggestion.data.message || []);
+    }
 
-    console.log("Suggested Vehicle Data:", vehicleSuggestion.data);
-    setSuggestedVehicles(vehicleSuggestion.data.message || []);
+    else{
+      alert("No routes found for this stop combination.");
+      setSuggestedVehicles([])
+    }
+
   };
 
   const handleSocket = async(vehicleID) =>{
@@ -56,9 +64,6 @@ export default function PassengerPage() {
   }
 
 
-
-
-
   return (
       <div className="p-6 space-y-6">
         <PassengerFormComponent sendData={handleSendData} />
@@ -67,7 +72,7 @@ export default function PassengerPage() {
         {suggestedVehicles.length > 0 && (
           <div className="bg-white shadow-md rounded-xl p-4">
             <h2 className="text-lg font-semibold mb-3">
-              🚐 Suggested Vehicles ({suggestedVehicles.length})
+              Suggested Vehicles ({suggestedVehicles.length})
             </h2>
 
             <table className="min-w-full border border-gray-300 rounded-lg">
@@ -92,6 +97,9 @@ export default function PassengerPage() {
                     <td className="py-2 px-3 border-b text-blue-600 font-medium">
                       {vehicle.status}
                     </td>
+                    {/* <td className="py-2 px-3 border-b"><button onClick={()=>{
+                      console.log(vehicle.vehicle_id)
+                      handleSocket(vehicle.vehicle_id)}}>JOIN</button></td> */}
                   </tr>
                 ))}
               </tbody>

@@ -12,7 +12,7 @@ export default function RegisterForm() {
     e.preventDefault();
     const form = e.target;
     const data = Object.fromEntries(new FormData(form).entries());
-    data.role = role; // explicitly add role
+    data.role = role; 
 
     let apiUrl = "http://localhost:3000/api/auth/register";
 
