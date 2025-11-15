@@ -77,33 +77,34 @@ export const createStops = async (req, res) => {
 // POST /api/routes
 export const createRoute = async (req, res) => {
   try {
-    const { error, value } = createRouteSchema.validate(req.body);
-    if (error) {
+    const { vehicle_number, description, stops } = req.body;
+
+    // Basic validation
+    if (!vehicle_number || !description || !Array.isArray(stops)) {
       return res.status(400).json({
         success: false,
-        message: "Validation failed",
-        details: error.details.map((d) => d.message),
+        message:
+          "Invalid request. Missing vehicle_number, description or stops array.",
       });
     }
 
-    const { stopNames, vehicle_number, description } = value;
-
-    const stopIds = await GetStopID(stopNames);
-    if (stopIds.length !== stopNames.length) {
-      return res.status(404).json({
+    if (stops.length === 0) {
+      return res.status(400).json({
         success: false,
-        message: "Some stop names were not found in the database",
+        message: "At least one stop ID must be provided.",
       });
     }
 
-    const result = await addNewRoute(stopIds, vehicle_number, description);
-    res.status(201).json({
+    const result = await addNewRoute(stops, vehicle_number, description);
+
+    return res.status(201).json({
       success: true,
-      message: result,
+      message: "Route created successfully",
+      data: result,
     });
   } catch (err) {
     console.error("Error in createRoute:", err);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Internal Server Error while creating route",
     });

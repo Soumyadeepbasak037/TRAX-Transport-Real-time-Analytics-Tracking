@@ -12,7 +12,7 @@ export default function PassengerFormComponent({ sendData }) {
         const res = await API.get("/routeManagement/allStops");
 
         if (res.data.success && Array.isArray(res.data.message)) {
-          setStops(res.data.message); // store stops in state
+          setStops(res.data.message); 
         }
       } catch (err) {
         console.error("Error fetching stops:", err);
@@ -38,11 +38,10 @@ export default function PassengerFormComponent({ sendData }) {
       return;
     }
 
-    // send stop IDs to parent
     sendData({ srcStop, destStop });
   };
 
-  // Render
+
   if (loading) return <p>Loading stops...</p>;
 
   return (

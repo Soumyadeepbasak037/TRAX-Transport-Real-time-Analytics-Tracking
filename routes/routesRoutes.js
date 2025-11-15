@@ -13,7 +13,7 @@ router.post(
 );
 
 router.post(
-  "/insertRouteStops",
+  "/addRoute",
   auth_middleware,
   roleMiddleware("admin"),
   routes_controller.createRoute

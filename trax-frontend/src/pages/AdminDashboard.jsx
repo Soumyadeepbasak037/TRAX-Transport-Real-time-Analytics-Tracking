@@ -4,6 +4,7 @@ import API from "../api.js";
 import RouteList from "../components/RouteList.jsx";
 import ActiveTripsCard from "../components/ActiveTripsCard.jsx";
 import io from "socket.io-client";
+import AddRouteComponent from "../components/AddRouteCard.jsx";
 
 
 export default function AdminDashboard() {
@@ -81,6 +82,13 @@ export default function AdminDashboard() {
     <div className="p-6 min-h-screen bg-gray-100">
       <h1 className="text-2xl font-semibold mb-6">Admin Dashboard</h1>
 
+
+       {/* ADD ROUTE SECTION */}
+        <section className="mb-10">
+          <h2 className="text-xl font-bold mb-4 text-gray-800">Add New Route</h2>
+          <AddRouteComponent/>
+       </section>
+      
       {/* ROUTE SECTION */}
       <section className="mb-10">
         <h2 className="text-xl font-bold mb-4 text-gray-800">
