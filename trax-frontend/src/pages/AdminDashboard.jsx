@@ -163,7 +163,7 @@ export default function AdminDashboard() {
       {locationData && (
         <div className="mt-6 bg-white shadow-sm rounded-xl p-4 border border-gray-200 max-w-3xl mx-auto">
           <h3 className="text-lg font-semibold text-gray-800 mb-2">Current Vehicle Location</h3>
-          <p className="text-gray-700 text-sm">Vehicle ID: {locationData.vehicleId}</p>
+          <p className="text-gray-700 tzext-sm">Vehicle ID: {locationData.vehicleId}</p>
           <p className="text-gray-700 text-sm">Trip ID: {locationData.tripId}</p>
           <p className="text-gray-700 text-sm">Latitude: {locationData.lat}</p>
           <p className="text-gray-700 text-sm">Longitude: {locationData.lng}</p>

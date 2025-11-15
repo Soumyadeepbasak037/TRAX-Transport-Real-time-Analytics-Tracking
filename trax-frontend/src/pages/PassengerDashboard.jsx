@@ -54,7 +54,7 @@ export default function PassengerPage() {
         });
 
     console.log("Joining vehicle room:", vehicleID);
-    socket.emit("passenger:join", { vehicleID });
+    socket.emit("passenger:join", {  vehicleId: vehicleID });
     socket.off("vehicleLocationUpdate");
 
     socket.on("vehicleLocationUpdate", (data) => {
@@ -97,9 +97,9 @@ export default function PassengerPage() {
                     <td className="py-2 px-3 border-b text-blue-600 font-medium">
                       {vehicle.status}
                     </td>
-                    {/* <td className="py-2 px-3 border-b"><button onClick={()=>{
-                      console.log(vehicle.vehicle_id)
-                      handleSocket(vehicle.vehicle_id)}}>JOIN</button></td> */}
+                    <td className="py-2 px-3 border-b"><button onClick={()=>{
+                     alert(vehicle.vehicle_id)
+                      handleSocket(vehicle.vehicle_id)}}>JOIN</button></td>
                   </tr>
                 ))}
               </tbody>
