@@ -4,11 +4,12 @@ import API from "../api.js";
 import RouteList from "../components/RouteList.jsx";
 import ActiveTripsCard from "../components/ActiveTripsCard.jsx";
 import io from "socket.io-client";
-import AddRouteComponent from "../components/AddRouteCard.jsx";
+import AddRouteComponent from "../components/AddRouteComponent.jsx";
+import RouteComponent from "../components/NewRouteComponent.jsx";
 
 
 export default function AdminDashboard() {
-  const [groupedRoutes, setGroupedRoutes] = useState({});
+  // const [groupedRoutes, setGroupedRoutes] = useState({});
   const [trips, setTrips] = useState([]);
   const [locationData, setLocationData] = useState(null);
   //local
@@ -23,21 +24,21 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     console.log(localStorage.getItem('token'))
-    const fetchRoutes = async () => {
-      try {
-        const res = await API.get("/routeManagement/allRoutes");
-        if (res.data.success) {
-          const grouped = {};
-          res.data.message.forEach((r) => {
-            if (!grouped[r.route_id]) grouped[r.route_id] = [];
-            grouped[r.route_id].push(r);
-          });
-          setGroupedRoutes(grouped);
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    };
+    // const fetchRoutes = async () => {
+    //   try {
+    //     const res = await API.get("/routeManagement/allRoutes");
+    //     if (res.data.success) {
+    //       const grouped = {};
+    //       res.data.message.forEach((r) => {
+    //         if (!grouped[r.route_id]) grouped[r.route_id] = [];
+    //         grouped[r.route_id].push(r);
+    //       });
+    //       // setGroupedRoutes(grouped);
+    //     }
+    //   } catch (err) {
+    //     console.error(err);
+    //   }
+    // };
 
     const fetchActiveTrips = async () => {
       try {
@@ -51,7 +52,7 @@ export default function AdminDashboard() {
       }
     };
 
-    fetchRoutes();
+    // fetchRoutes();
     fetchActiveTrips();
   }, []);
 
@@ -94,7 +95,8 @@ export default function AdminDashboard() {
         <h2 className="text-xl font-bold mb-4 text-gray-800">
           All Routes
         </h2>
-        <RouteList groupedRoutes={groupedRoutes} />
+        {/* <RouteList groupedRoutes={groupedRoutes} /> */}
+        <RouteComponent/>
       </section>
 
      {/* ACTIVE TRIPS SECTION */}
