@@ -41,13 +41,6 @@ const insertStopsSchema = Joi.object({
   stops: Joi.array().items(stopSchema).min(1).required(),
 });
 
-const createRouteSchema = Joi.object({
-  stopNames: Joi.array().items(Joi.string().min(2)).min(2).required(),
-  vehicle_number: Joi.string().alphanum().min(2).required(),
-  description: Joi.string().allow("").optional(),
-});
-
-// POST /api/stops
 export const createStops = async (req, res) => {
   try {
     const { error, value } = insertStopsSchema.validate(req.body);
@@ -74,7 +67,6 @@ export const createStops = async (req, res) => {
   }
 };
 
-// POST /api/routes
 export const createRoute = async (req, res) => {
   try {
     const { vehicle_number, description, stops } = req.body;

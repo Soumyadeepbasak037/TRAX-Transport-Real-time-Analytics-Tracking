@@ -1,6 +1,21 @@
+import { getAdapter } from "axios";
 import db from "../config/db.js";
 // import { getallStops } from "../controllers/routesController.js";
 //CRUD OPS
+
+const Output_Modifier = (route_arr) => {
+  // console.log(route_arr);
+
+  const route_arr_modified = route_arr.reduce((accum, route) => {
+    if (!accum[route.route_id]) {
+      accum[route.route_id] = [];
+    }
+    accum[route.route_id].push(route);
+    return accum;
+  }, {});
+
+  return route_arr_modified;
+};
 
 export const getAllRoutes = async () => {
   const query = `
@@ -9,9 +24,9 @@ inner join stops s on rs.stop_id = s.stop_id order by route_id,stop_order asc`;
 
   const result = await db.query(query);
   // console.log(result.rows);
-  return result.rows;
+  return Output_Modifier(result.rows);
 };
-// getAllRoutes();
+console.log(await getAllRoutes());
 
 export const getAllStops = async () => {
   try {

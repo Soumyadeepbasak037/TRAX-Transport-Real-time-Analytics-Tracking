@@ -4,7 +4,7 @@ import API from "../api.js";
 
 //for admin dashboard
 
-export default function AddRouteComponent({ sendData}){ 
+export default function AddRouteComponent({sendData}){ 
     const [stops,setStops] = useState([])
     const [stopLoading,setLoading] = useState(true)
     const [stopID_arr,setstopID_arr] = useState([])
@@ -56,6 +56,8 @@ export default function AddRouteComponent({ sendData}){
 
             
             console.log("Submitted", res.data);
+            alert("Submitted")
+            
         } catch (err) {
             console.log(err);
         }
@@ -68,7 +70,6 @@ export default function AddRouteComponent({ sendData}){
   <div className="max-w-3xl mx-auto p-6">
     <h2 className="text-2xl font-bold mb-6 text-gray-800">Create New Route</h2>
 
-    {/* FORM CARD */}
     <div className="bg-white shadow rounded-xl p-6 border mb-10">
       <h3 className="text-lg font-semibold mb-4 text-gray-700">Route Details</h3>
 
