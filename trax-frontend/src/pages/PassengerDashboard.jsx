@@ -5,6 +5,7 @@ import API from "../api.js";
 // import ActiveTripsCard from "../components/ActiveTripsCard.jsx";
 import io from "socket.io-client";
 import PassengerFormComponent from "../components/PassengerForm.jsx";
+import LiveLocationMap from "../components/LiveLocationMap.jsx";
 
 
 
@@ -47,21 +48,20 @@ export default function PassengerPage() {
 
   };
 
-  const handleSocket = async(vehicleID) =>{
-    
-     const socket = io("http://localhost:3000", {
-          auth: { token: localStorage.getItem('token') },
-        });
+  const handleSocket = (vehicleID) => {
+  const socket = io("http://localhost:3000", {
+    auth: { token: localStorage.getItem('token') },
+  });
 
-    console.log("Joining vehicle room:", vehicleID);
-    socket.emit("passenger:join", {  vehicleId: vehicleID });
-    socket.off("vehicleLocationUpdate");
+  socket.off("vehicleLocationUpdate");  // clear old listener
 
-    socket.on("vehicleLocationUpdate", (data) => {
-    console.log("Vehicle Location Update:", data);
+  socket.emit("passenger:join", { vehicleId: vehicleID });
+
+  socket.on("vehicleLocationUpdate", (data) => {
     setLocationData(data);
-    });
-  }
+  });
+};
+
 
 
   return (
@@ -97,9 +97,16 @@ export default function PassengerPage() {
                     <td className="py-2 px-3 border-b text-blue-600 font-medium">
                       {vehicle.status}
                     </td>
-                    <td className="py-2 px-3 border-b"><button onClick={()=>{
-                     alert(vehicle.vehicle_id)
-                      handleSocket(vehicle.vehicle_id)}}>JOIN</button></td>
+                      <td className="py-2 px-3 border-b">
+                      {vehicle.status === "ongoing" && (
+                        <button
+                          onClick={() => handleSocket(vehicle.vehicle_id)}
+                          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm shadow-sm transition"
+                        >
+                          Track
+                        </button>
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -107,12 +114,15 @@ export default function PassengerPage() {
           </div>
         )}
 
-        {/*If no data yet */}
-        {suggestedVehicles.length === 0 && (
-          <p className="text-gray-500 text-center mt-4">
-            No vehicle suggestions yet. Select stops to get routes.
-          </p>
-        )}
+       {suggestedVehicles.length === 0 && (
+      <p className="text-gray-500 text-center mt-4">
+        No vehicle suggestions yet. Select stops to get routes.
+      </p>
+      )}
+
+      {locationData && (
+        <LiveLocationMap locationData={locationData} />
+      )}
       </div>
     );
   }
