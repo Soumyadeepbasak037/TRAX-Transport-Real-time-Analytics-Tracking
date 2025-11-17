@@ -4,17 +4,16 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       
-      {/* NAVBAR */}
+
       <nav className="w-full bg-white shadow-md py-4 px-8 flex items-center justify-between">
-        {/* Empty left space */}
+
         <div className="w-1/3"></div>
 
-        {/* Centered Logo */}
         <h1 className="text-2xl font-bold text-blue-700 tracking-wide text-center w-1/3">
           TRAX
         </h1>
 
-        {/* Right Buttons */}
+
         <div className="w-1/3 flex justify-end space-x-4">
           <Link
             to="/login"
@@ -31,7 +30,7 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* HERO SECTION */}
+
       <div className="flex flex-col items-center justify-center flex-1 px-6 py-24">
         <h2 className="text-4xl font-bold text-gray-800 mb-4 text-center">
           Real-Time Bus Tracking Made Simple
@@ -44,7 +43,7 @@ export default function Home() {
 
         <div className="flex space-x-4">
           <Link
-            to="/"
+            to="/login"
             className="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition shadow-md"
           >
             Login
