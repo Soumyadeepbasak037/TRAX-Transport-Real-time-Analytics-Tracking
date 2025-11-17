@@ -53,7 +53,7 @@ export default function PassengerPage() {
     auth: { token: localStorage.getItem('token') },
   });
 
-  socket.off("vehicleLocationUpdate");  // clear old listener
+  socket.off("vehicleLocationUpdate");  
 
   socket.emit("passenger:join", { vehicleId: vehicleID });
 
@@ -68,7 +68,6 @@ export default function PassengerPage() {
       <div className="p-6 space-y-6">
         <PassengerFormComponent sendData={handleSendData} />
 
-        {/* Show suggested vehicles */}
         {suggestedVehicles.length > 0 && (
           <div className="bg-white shadow-md rounded-xl p-4">
             <h2 className="text-lg font-semibold mb-3">

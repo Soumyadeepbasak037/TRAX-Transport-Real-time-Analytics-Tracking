@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import API from "../api.js";
 import { jwtDecode } from "jwt-decode";
 import io from "socket.io-client";
-
+import LiveLocationMap from "../components/LiveLocationMap.jsx";
 
 // const socket = io("http://localhost:3000", {
 //     auth: { token: localStorage.getItem('token') },
@@ -85,11 +85,10 @@ export default function DriverDashboard(){
       const interval = setInterval(() => {
         if (latestLocation) {
           socket.emit("driverLocation", latestLocation);
-          console.log("📡 Sent location:", latestLocation.lat, latestLocation.lng);
+          console.log("Sent location:", latestLocation.lat, latestLocation.lng);
         }
       }, 1500);
 
-        // Cleanup
         return () => {
             clearInterval(interval);
             navigator.geolocation.clearWatch(watchId);
@@ -122,11 +121,14 @@ export default function DriverDashboard(){
       </div>
 
         {position ? (
+          <div>
         <div>
           <p>Lat: {position.lat.toFixed(6)}</p>
           <p>Lng: {position.lng.toFixed(6)}</p>
           <p>Speed: {position.speed?.toFixed(2)} m/s</p>
           <p>Accuracy: ±{position.accuracy} m</p>
+        </div>
+
         </div>
       ) : (
         <p>Waiting for GPS...</p>

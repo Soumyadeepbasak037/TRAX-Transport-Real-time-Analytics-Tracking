@@ -227,7 +227,7 @@ export default function AdminDashboard() {
   return (
     <div className="p-6 min-h-screen bg-gray-50">
 
-      {/* HEADER */}
+
       <header className="mb-10">
         <h1 className="text-3xl font-bold text-gray-800 tracking-tight">
           Admin Dashboard
@@ -237,10 +237,9 @@ export default function AdminDashboard() {
         </p>
       </header>
 
-      {/* GRID LAYOUT */}
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
-        {/* ADD ROUTE CARD */}
         <div className="bg-white shadow-md rounded-xl px-6 py-3 border border-gray-200">
         <h2 className="text-lg font-semibold text-gray-800 mb-2">
           Add New Route
@@ -249,8 +248,6 @@ export default function AdminDashboard() {
         <AddRouteComponent />
       </div>
 
-
-        {/* ROUTES LIST CARD */}
         <div className="bg-white shadow-lg rounded-2xl p-6 border border-gray-200">
           <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
             All Routes
@@ -260,7 +257,6 @@ export default function AdminDashboard() {
 
       </div>
 
-      {/* ACTIVE TRIPS SECTION */}
       <section className="mt-12">
         <h2 className="text-2xl font-bold text-gray-800 mb-4">
           Active Trips
@@ -338,7 +334,6 @@ export default function AdminDashboard() {
         )}
       </section>
 
-      {/* LOCATION CARD */}
      <LiveLocationMap locationData={locationData} />
 
 
