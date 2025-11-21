@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import API from "../api";
 
 export default function RegisterForm() {
   const [role, setRole] = useState(null);
@@ -14,10 +15,16 @@ export default function RegisterForm() {
     const data = Object.fromEntries(new FormData(form).entries());
     data.role = role; 
 
-    let apiUrl = "http://localhost:3000/api/auth/register";
+
+    // const res = await API.post("/routeManagement/activeTrips");
+    //     if (res.data.success) {
+    //       setTrips(res.data.message);
+    //     }
+
+    // let apiUrl = "http://localhost:3000/api/auth/register";
 
     try {
-      const res = await axios.post(apiUrl, data, {
+      const res = await API.post("/auth/register", data, {
         headers: { "Content-Type": "application/json" },
       });
       alert(res.data.message || "Registration successful!");

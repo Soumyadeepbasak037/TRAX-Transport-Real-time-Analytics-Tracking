@@ -6,6 +6,7 @@ import API from "../api.js";
 import io from "socket.io-client";
 import PassengerFormComponent from "../components/PassengerForm.jsx";
 import LiveLocationMap from "../components/LiveLocationMap.jsx";
+import NearestStopSuggestion from "../components/NextStopSuggestion.jsx";
 
 
 
@@ -49,9 +50,17 @@ export default function PassengerPage() {
   };
 
   const handleSocket = (vehicleID) => {
-  const socket = io("http://localhost:3000", {
-    auth: { token: localStorage.getItem('token') },
-  });
+  
+
+    // local
+        // const socket = io("http://localhost:3000", {
+        //     auth: { token: localStorage.getItem('token') },
+        // });
+      //cloud
+      const socket = io("https://trax-transport-real-time-analytics.onrender.com", {
+          auth: { token: localStorage.getItem('token') },
+      });
+
 
   socket.off("vehicleLocationUpdate");  
 
@@ -60,8 +69,8 @@ export default function PassengerPage() {
   socket.on("vehicleLocationUpdate", (data) => {
     setLocationData(data);
   });
-};
 
+  };
 
 
   return (
@@ -120,7 +129,10 @@ export default function PassengerPage() {
       )}
 
       {locationData && (
+        <>
         <LiveLocationMap locationData={locationData} />
+        <NearestStopSuggestion lat={locationData.lat} lng={locationData.lng} />
+        </>
       )}
       </div>
     );

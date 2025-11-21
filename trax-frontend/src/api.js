@@ -3,14 +3,13 @@ import axios from "axios";
 
 const API = axios.create({
   // local,
-  baseURL: "http://localhost:3000/api",
+  // baseURL: "http://localhost:3000/api",
   //render ->
-  // baseURL: "https://trax-transport-real-time-analytics.onrender.com/api",
+  baseURL: "https://trax-transport-real-time-analytics.onrender.com/api",
 });
 
-// Add token to every request if available
 API.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token"); // stored after login
+  const token = localStorage.getItem("token");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }

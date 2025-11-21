@@ -46,13 +46,13 @@ export default function DriverDashboard(){
     const [position, setPosition] = useState(null);
     const sendLocation = ()=>{
       // local
-        const socket = io("http://localhost:3000", {
-            auth: { token: localStorage.getItem('token') },
-        });
-      //cloud
-        // const socket = io("https://trax-transport-real-time-analytics.onrender.com", {
+        // const socket = io("http://localhost:3000", {
         //     auth: { token: localStorage.getItem('token') },
         // });
+      //cloud
+        const socket = io("https://trax-transport-real-time-analytics.onrender.com", {
+            auth: { token: localStorage.getItem('token') },
+        });
 
         socket.on("connect", () => {
             console.log("Connected to backend");

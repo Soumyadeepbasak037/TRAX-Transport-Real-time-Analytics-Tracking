@@ -1,5 +1,8 @@
 import Joi from "joi";
-import { singleHopSuggestion } from "../dbLogic/vehicle_suggestion.js";
+import {
+  singleHopSuggestion,
+  nearest_stop,
+} from "../dbLogic/vehicle_suggestion.js";
 
 export const singlehopsuggestion = async (req, res) => {
   try {
@@ -9,6 +12,20 @@ export const singlehopsuggestion = async (req, res) => {
     // console.log("Rows:", result.rows);
     return res.json({ success: true, message: result.rows });
   } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err,
+    });
+  }
+};
+
+export const nearestStopSuggestion = async (req, res) => {
+  try {
+    const { lat, lng } = req.body;
+    const result = await nearest_stop(lat, lng);
+    return res.json({ success: true, message: result.rows });
+  } catch (err) {
+    console.log(err);
     res.status(500).json({
       success: false,
       message: err,

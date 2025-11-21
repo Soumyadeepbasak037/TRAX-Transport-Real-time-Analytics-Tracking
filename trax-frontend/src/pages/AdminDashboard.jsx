@@ -212,13 +212,13 @@ export default function AdminDashboard() {
   }, []);
 
   const handleTrack = (vehicleId) => {
-    const socket = io("http://localhost:3000", {
-      auth: { token: localStorage.getItem("token") },
-    });
-    //   //remote
-//     //  const socket = io("https://trax-transport-real-time-analytics.onrender.com", {
-//     //         auth: { token: localStorage.getItem('token') },
-//     //     });
+    // const socket = io("http://localhost:3000", {
+    //   auth: { token: localStorage.getItem("token") },
+    // });
+      // remote
+     const socket = io("https://trax-transport-real-time-analytics.onrender.com", {
+            auth: { token: localStorage.getItem('token') },
+        });
 
     socket.emit("passenger:join", { vehicleId });
     socket.off("vehicleLocationUpdate");

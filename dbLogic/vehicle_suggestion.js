@@ -19,3 +19,25 @@ export const singleHopSuggestion = async (srcStopID, destStopID) => {
 // export const multiHopSuggestion = async () => {};
 
 // await singleHopSuggestion();
+
+export const nearest_stop = async (lat, lng) => {
+  const query = `SELECT stop_id, stop_name,
+            ST_Distance(
+                location,
+                ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography
+            ) AS distance_meters
+      FROM stops
+      ORDER BY distance_meters
+      ;`;
+
+  try {
+    const result = await db.query(query, [lng, lat]);
+    console.log(result.rows);
+    return result;
+  } catch (err) {
+    console.log(err);
+    return err;
+  }
+};
+
+nearest_stop(22.582049, 88.421829);
