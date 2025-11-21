@@ -1,7 +1,7 @@
 
 # Project Title
 
-A brief description of what this project does and who it's for
+A modern real-time bus transport tracking and analytics system designed to improve route planning, passenger experience, and driver-side operations.
 
 ## 🚀 Deployment Links
 
