@@ -2,6 +2,7 @@ import Joi from "joi";
 import {
   singleHopSuggestion,
   nearest_stop,
+  availible_vehicle_with_routes,
 } from "../dbLogic/vehicle_suggestion.js";
 
 export const singlehopsuggestion = async (req, res) => {
@@ -24,6 +25,22 @@ export const nearestStopSuggestion = async (req, res) => {
 
     const result = await nearest_stop(lat, lng);
 
+    return res.json({
+      success: true,
+      message: result.rows,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
+export const Avalible_vehicles = async () => {
+  try {
+    const result = await availible_vehicle_with_routes();
     return res.json({
       success: true,
       message: result.rows,

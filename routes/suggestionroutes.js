@@ -4,6 +4,7 @@ import { singlehopsuggestion } from "../controllers/suggestionController.js";
 import auth_middleware from "../middlewares/authMiddleware.js";
 import { nearestStopSuggestion } from "../controllers/suggestionController.js";
 // import roleMiddleware from "../middlewares/roleValidationMiddleware.js";
+import { Avalible_vehicles } from "../controllers/suggestionController.js";
 const router = express.Router();
 
 router.post("/singleHopSuggestion", auth_middleware, singlehopsuggestion);

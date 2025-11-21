@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import axios from "axios";
 import API from "../api";
+import { useEffect } from "react";
+
 
 export default function RegisterForm() {
   const [role, setRole] = useState(null);
+  const [vehicles, setVehicles] = useState([]);
 
   const handleRoleChange = (e) => {
     setRole(e.target.value);
@@ -23,6 +26,7 @@ export default function RegisterForm() {
 
     // let apiUrl = "http://localhost:3000/api/auth/register";
 
+
     try {
       const res = await API.post("/auth/register", data, {
         headers: { "Content-Type": "application/json" },
@@ -34,6 +38,23 @@ export default function RegisterForm() {
       alert(err.response?.data?.message || "Registration failed!");
     }
   };
+
+
+
+  useEffect(() => {
+  const fetchVehicles = async () => {
+    if (role === "driver") {
+      try {
+        const res = await API.get("/essentials/availibleVehiclesWithRoutes");
+        setVehicles(res.data); // expects array
+      } catch (err) {
+        console.error("Failed to load vehicles");
+      }
+    }
+  };
+
+  fetchVehicles();
+}, [role]);
 
   return (
     <div className="max-w-lg mx-auto mt-10 bg-white p-6 rounded-xl shadow-md">
@@ -85,13 +106,18 @@ export default function RegisterForm() {
           {/* Driver-Specific Fields */}
           {role === "driver" && (
             <>
-              <input
-                name="vehicle_number"
-                type="text"
-                placeholder="Vehicle Number"
-                className="w-full border p-2 mb-2 rounded"
-                required
-              />
+              <select
+              name="vehicle_number"
+              className="w-full border p-2 mb-2 rounded"
+              required
+            >
+              <option value="">-- Select Vehicle --</option>
+              {vehicles.map((v) => (
+                <option key={v.route_id} value={v.vehicle_number}>
+                  {v.vehicle_number}
+                </option>
+              ))}
+            </select>
               <input
                 name="vehicle_plate_number"
                 type="text"

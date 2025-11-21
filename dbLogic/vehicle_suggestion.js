@@ -36,7 +36,20 @@ export const nearest_stop = async (lat, lng) => {
     return result;
   } catch (err) {
     console.log(err);
+    return err;
   }
 };
 
-nearest_stop(22.582049, 88.421829);
+export const availible_vehicle_with_routes = async () => {
+  const query = `SELECT * FROM routes`;
+  try {
+    const result = await db.query(query);
+    console.log(result.rows);
+    return result;
+  } catch (err) {
+    console.log(err);
+    return err;
+  }
+};
+
+// availible_vehicle_with_routes();
