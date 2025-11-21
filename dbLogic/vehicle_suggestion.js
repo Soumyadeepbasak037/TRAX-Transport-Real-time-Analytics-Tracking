@@ -32,11 +32,10 @@ export const nearest_stop = async (lat, lng) => {
 
   try {
     const result = await db.query(query, [lng, lat]);
-    console.log(result.rows);
+    // console.log(result.rows);
     return result;
   } catch (err) {
     console.log(err);
-    return err;
   }
 };
 

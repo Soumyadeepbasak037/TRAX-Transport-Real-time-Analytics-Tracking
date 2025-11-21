@@ -18,17 +18,21 @@ export const singlehopsuggestion = async (req, res) => {
     });
   }
 };
-
 export const nearestStopSuggestion = async (req, res) => {
   try {
     const { lat, lng } = req.body;
+
     const result = await nearest_stop(lat, lng);
-    return res.json({ success: true, message: result.rows });
+
+    return res.json({
+      success: true,
+      message: result.rows,
+    });
   } catch (err) {
     console.log(err);
     res.status(500).json({
       success: false,
-      message: err,
+      message: err.message,
     });
   }
 };

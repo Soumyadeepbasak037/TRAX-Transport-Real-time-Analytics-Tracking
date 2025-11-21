@@ -18,6 +18,9 @@ export default function PassengerPage() {
   const handleSendData = async({ srcStop, destStop }) => {
     console.log("Selected stops:", srcStop, destStop);
 
+
+  
+
     const routesSuggestion = await API.post("/suggestion/singleHopSuggestion",{
       src_id: srcStop,
       dest_id: destStop,

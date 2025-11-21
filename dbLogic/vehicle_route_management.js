@@ -26,7 +26,7 @@ inner join stops s on rs.stop_id = s.stop_id order by route_id,stop_order asc`;
   // console.log(result.rows);
   return Output_Modifier(result.rows);
 };
-console.log(await getAllRoutes());
+// console.log(await getAllRoutes());
 
 export const getAllStops = async () => {
   try {
