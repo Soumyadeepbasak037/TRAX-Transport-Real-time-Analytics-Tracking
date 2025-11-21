@@ -14,6 +14,6 @@ router.post(
   tripController.GetDriverDetails
 );
 
-router.get("/availibleVehiclesWithRoutes", auth_middleware, Avalible_vehicles);
+router.get("/availibleVehiclesWithRoutes", Avalible_vehicles);
 
 export default router;

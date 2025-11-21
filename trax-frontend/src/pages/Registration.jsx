@@ -46,7 +46,7 @@ export default function RegisterForm() {
     if (role === "driver") {
       try {
         const res = await API.get("/essentials/availibleVehiclesWithRoutes");
-        setVehicles(res.data); // expects array
+        setVehicles(res.data.message)
       } catch (err) {
         console.error("Failed to load vehicles");
       }
