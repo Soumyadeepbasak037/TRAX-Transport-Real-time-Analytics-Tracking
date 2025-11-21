@@ -7,6 +7,7 @@ A modern real-time bus transport tracking and analytics system designed to impro
 
 - **Backend (Render):** https://trax-transport-real-time-analytics.onrender.com
 - **Frontend (Netlify):** https://sweet-caramel-cac78c.netlify.app
+- AFTER CLICKING THESE LINKS WAIT FOR THE BACKEND TO GO LIVE
 
 ---
 
