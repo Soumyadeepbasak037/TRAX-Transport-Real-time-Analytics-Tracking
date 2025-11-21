@@ -38,7 +38,7 @@ export const nearestStopSuggestion = async (req, res) => {
   }
 };
 
-export const Avalible_vehicles = async () => {
+export const Avalible_vehicles = async (req, res) => {
   try {
     const result = await availible_vehicle_with_routes();
     return res.json({
