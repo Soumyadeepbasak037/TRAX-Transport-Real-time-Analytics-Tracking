@@ -1,5 +1,5 @@
 
-# Project Title
+# TRAX – Transport Real-time Analytics & Tracking
 
 A modern real-time bus transport tracking and analytics system designed to improve route planning, passenger experience, and driver-side operations.
 
