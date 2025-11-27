@@ -26,11 +26,11 @@ A modern real-time bus transport tracking and analytics system designed to impro
 - Nearest stop detection using geospatial logic
 - Single-hop route suggestion
 - Basic analytics endpoints
+- Admin Dashboard
 
 ### 🔄 In Progress
 - Full route recommendation engine
-- Passenger-side UI improvements
-- Admin dashboard
+- Passenger and Driver side UI improvements
 - Advanced analytics
 
 ---
