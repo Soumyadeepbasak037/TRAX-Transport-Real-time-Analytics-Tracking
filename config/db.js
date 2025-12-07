@@ -47,7 +47,7 @@ const { Pool } = pkg;
 const pool = process.env.DATABASE_URL
   ? new Pool({
       connectionString: process.env.DATABASE_URL,
-      ssl: { require: true },
+      ssl: { rejectUnauthorized: false },
     })
   : new Pool({
       user: process.env.DB_USER,
@@ -56,5 +56,6 @@ const pool = process.env.DATABASE_URL
       password: process.env.DB_PASSWORD,
       port: process.env.DB_PORT,
     });
+console.log(process.env.DATABASE_URL);
 
 export default pool;
