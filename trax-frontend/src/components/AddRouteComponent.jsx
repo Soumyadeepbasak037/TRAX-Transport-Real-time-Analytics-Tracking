@@ -56,7 +56,7 @@ export default function AddRouteComponent({sendData}){
 
             
             console.log("Submitted", res.data);
-            alert("Submitted")
+            alert(res.data.data)
             
         } catch (err) {
             console.log(err);
