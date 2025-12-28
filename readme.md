@@ -12,7 +12,7 @@ A brief description of what this project does and who it's for
 
 ## Project Status
 
-**🚧 Not yet completed — actively under development**
+**Not yet completed — actively under development**
 
 ---
 
