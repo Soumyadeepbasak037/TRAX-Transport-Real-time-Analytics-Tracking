@@ -3,22 +3,22 @@
 
 A brief description of what this project does and who it's for
 
-## 🚀 Deployment Links
+## Deployment Links
 
 - **Backend (Render):** https://trax-transport-real-time-analytics.onrender.com
 - **Frontend (Netlify):** https://sweet-caramel-cac78c.netlify.app
 
 ---
 
-## 📌 Project Status
+## Project Status
 
 **🚧 Not yet completed — actively under development**
 
 ---
 
-## 🧩 Features
+## Features
 
-### ✅ Completed
+### Completed
 - User authentication (JWT)
 - Driver login and vehicle selection
 - Real-time GPS updates from driver app
@@ -26,7 +26,7 @@ A brief description of what this project does and who it's for
 - Single-hop route suggestion
 - Basic analytics endpoints
 
-### 🔄 In Progress
+### In Progress
 - Full route recommendation engine
 - Passenger-side UI improvements
 - Admin dashboard
@@ -34,7 +34,7 @@ A brief description of what this project does and who it's for
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### **Frontend**
 - React.js  
