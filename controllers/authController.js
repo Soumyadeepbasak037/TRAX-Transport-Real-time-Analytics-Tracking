@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import db, { getClient } from "../config/db.js";
 import Joi from "joi";
 import * as helper from "../helper_functions/helper.js";
-
+import * as validators from "../validators/auth_validators.js";
 const SECRET_KEY = "hehe";
 
 const UNIQUE_CONSTRAINT_MESSAGES = {
@@ -84,6 +84,36 @@ export const register = async (req, res) => {
   try {
     await client.query("BEGIN");
 
+    const userConflict = await validators.UserValidator(
+      client,
+      username,
+      email,
+    );
+    if (userConflict) {
+      await client.query("ROLLBACK");
+      return res.status(409).json({ message: userConflict });
+    }
+
+    if (role === "driver") {
+      const vehicleConflict = await validators.VehicleValidator(
+        client,
+        vehicle_number,
+        vehicle_plate_number,
+      );
+      if (vehicleConflict) {
+        await client.query("ROLLBACK");
+        return res.status(409).json({ message: vehicleConflict });
+      }
+
+      const driverConflict = await validators.DriverValidator(
+        client,
+        driver_license_no,
+      );
+      if (driverConflict) {
+        await client.query("ROLLBACK");
+        return res.status(409).json({ message: driverConflict });
+      }
+    }
     const result = await client.query(
       `INSERT INTO users (username, password_hash, email, role) VALUES ($1, $2, $3, $4) RETURNING user_id`,
       [username, hashed_passwd, email, role],
