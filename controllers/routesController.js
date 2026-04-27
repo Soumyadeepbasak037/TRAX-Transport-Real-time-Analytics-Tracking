@@ -71,7 +71,6 @@ export const createRoute = async (req, res) => {
   try {
     const { vehicle_number, description, stops } = req.body;
 
-    // Basic validation
     if (!vehicle_number || !description || !Array.isArray(stops)) {
       return res.status(400).json({
         success: false,
@@ -91,8 +90,8 @@ export const createRoute = async (req, res) => {
 
     return res.status(201).json({
       success: true,
-      message: "Route created successfully",
       data: result,
+      message: result,
     });
   } catch (err) {
     console.error("Error in createRoute:", err);

@@ -43,78 +43,124 @@
 //   }
 // };
 
+// import db from "../config/db.js";
+
+// export const insertNewDriver = async (
+//   user_id,
+//   full_name,
+//   license_number,
+//   phone,
+//   assigned_vehicle_id
+// ) => {
+//   const client = await db.connect();
+
+//   try {
+//     await client.query("BEGIN");
+
+//     const insertQuery = `
+//       INSERT INTO drivers (user_id, full_name, license_number, phone, assigned_vehicle_id)
+//       VALUES ($1, $2, $3, $4, $5)
+//       RETURNING driver_id
+//     `;
+
+//     const result = await client.query(insertQuery, [
+//       user_id,
+//       full_name,
+//       license_number,
+//       phone,
+//       assigned_vehicle_id,
+//     ]);
+
+//     await client.query("COMMIT");
+
+//     return result.rows[0].driver_id;
+//   } catch (err) {
+//     await client.query("ROLLBACK");
+//     console.error("Driver insert failed:", err);
+//     throw err;
+//   } finally {
+//     client.release();
+//   }
+// };
+
+// export const insertNewVehicle = async (
+//   vehicle_number,
+//   type,
+//   capacity,
+//   vehicle_plate_number
+// ) => {
+//   const client = await db.connect();
+
+//   try {
+//     await client.query("BEGIN");
+
+//     const insertQuery = `
+//       INSERT INTO vehicles (vehicle_number, type, capacity, vehicle_plate_number)
+//       VALUES ($1, $2, $3, $4)
+//       RETURNING vehicle_id
+//     `;
+
+//     const result = await client.query(insertQuery, [
+//       vehicle_number,
+//       type,
+//       capacity,
+//       vehicle_plate_number,
+//     ]);
+
+//     await client.query("COMMIT");
+
+//     return result.rows[0].vehicle_id;
+//   } catch (err) {
+//     await client.query("ROLLBACK");
+//     console.error("Vehicle insert failed:", err);
+//     throw err;
+//   } finally {
+//     client.release();
+//   }
+// };
+
 import db from "../config/db.js";
 
 export const insertNewDriver = async (
+  client,
   user_id,
   full_name,
   license_number,
   phone,
-  assigned_vehicle_id
+  assigned_vehicle_id,
 ) => {
-  const client = await db.connect();
-
-  try {
-    await client.query("BEGIN");
-
-    const insertQuery = `
-      INSERT INTO drivers (user_id, full_name, license_number, phone, assigned_vehicle_id)
-      VALUES ($1, $2, $3, $4, $5)
-      RETURNING driver_id
-    `;
-
-    const result = await client.query(insertQuery, [
-      user_id,
-      full_name,
-      license_number,
-      phone,
-      assigned_vehicle_id,
-    ]);
-
-    await client.query("COMMIT");
-
-    return result.rows[0].driver_id;
-  } catch (err) {
-    await client.query("ROLLBACK");
-    console.error("Driver insert failed:", err);
-    throw err;
-  } finally {
-    client.release();
-  }
+  const insertQuery = `
+    INSERT INTO drivers (user_id, full_name, license_number, phone, assigned_vehicle_id)
+    VALUES ($1, $2, $3, $4, $5)
+    RETURNING driver_id
+  `;
+  const result = await client.query(insertQuery, [
+    user_id,
+    full_name,
+    license_number,
+    phone,
+    assigned_vehicle_id,
+  ]);
+  return result.rows[0].driver_id;
 };
 
 export const insertNewVehicle = async (
+  client,
   vehicle_number,
   type,
   capacity,
-  vehicle_plate_number
+  vehicle_plate_number,
 ) => {
-  const client = await db.connect();
-
-  try {
-    await client.query("BEGIN");
-
-    const insertQuery = `
-      INSERT INTO vehicles (vehicle_number, type, capacity, vehicle_plate_number)
-      VALUES ($1, $2, $3, $4)
-      RETURNING vehicle_id
-    `;
-
-    const result = await client.query(insertQuery, [
-      vehicle_number,
-      type,
-      capacity,
-      vehicle_plate_number,
-    ]);
-
-    await client.query("COMMIT");
-
-    return result.rows[0].vehicle_id;
-  } catch (err) {
-    await client.query("ROLLBACK");
-    console.error("Vehicle insert failed:", err);
-    throw err;
-  } finally {
-    client.release();
-  }
+  const insertQuery = `
+    INSERT INTO vehicles (vehicle_number, type, capacity, vehicle_plate_number)
+    VALUES ($1, $2, $3, $4)
+    RETURNING vehicle_id
+  `;
+  const result = await client.query(insertQuery, [
+    vehicle_number,
+    type,
+    capacity,
+    vehicle_plate_number,
+  ]);
+  return result.rows[0].vehicle_id;
 };
