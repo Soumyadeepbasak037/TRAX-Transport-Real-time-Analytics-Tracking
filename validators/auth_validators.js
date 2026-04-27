@@ -17,7 +17,7 @@ export const VehicleValidator = async (
   vehicle_plate_number,
 ) => {
   const result = await client.query(
-    `SELECT vehicle_number, vehicle_plate_number FROM vehicles 
+    `SELECT vehicle_plate_number FROM vehicles 
      WHERE vehicle_number = $1 OR vehicle_plate_number = $2`,
     [vehicle_number, vehicle_plate_number],
   );
@@ -25,8 +25,6 @@ export const VehicleValidator = async (
   if (result.rows.length === 0) return null;
 
   const row = result.rows[0];
-  if (row.vehicle_number === vehicle_number)
-    return "Vehicle number already registered";
   if (row.vehicle_plate_number === vehicle_plate_number)
     return "Vehicle plate number already registered";
 };
