@@ -196,20 +196,41 @@ export default function AdminDashboard() {
   const [trips, setTrips] = useState([]);
   const [locationData, setLocationData] = useState(null);
 
-  useEffect(() => {
-    const fetchActiveTrips = async () => {
-      try {
-        const res = await API.post("/routeManagement/activeTrips");
-        if (res.data.success) {
-          setTrips(res.data.message);
-        }
-      } catch (err) {
-        console.log("Error fetching active trips:", err);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchActiveTrips = async () => {
+  //     try {
+  //       const res = await API.post("/routeManagement/activeTrips");
+  //       if (res.data.success) {
+  //         setTrips(res.data.message);
+  //       }
+  //     } catch (err) {
+  //       console.log("Error fetching active trips:", err);
+  //     }
+  //   };
+  //   fetchActiveTrips();
+  // }, []);
 
-    fetchActiveTrips();
-  }, []);
+  useEffect(() => {
+  const fetchActiveTrips = async () => {
+    try {
+      const res = await API.post("/routeManagement/activeTrips");
+      if (res.data.success) {
+        setTrips(res.data.message);
+      }
+    } catch (err) {
+      console.log("Error fetching active trips:", err);
+    }
+  };
+
+  // initial fetch
+  fetchActiveTrips();
+
+  // poll every 5 seconds
+  const interval = setInterval(fetchActiveTrips, 5000);
+
+  // cleanup (VERY IMPORTANT)
+  return () => clearInterval(interval);
+}, []);
 
   const handleTrack = (vehicleId) => {
     // const socket = io("http://localhost:3000", {
